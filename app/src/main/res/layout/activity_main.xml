@@ -129,19 +129,26 @@
             android:layout_weight="1"
             android:text="Add" />
         <Button
+            android:id="@+id/btn_update"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Update" />
+        <Button
+            android:id="@+id/btn_delete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Delete" />
+        <Button
             android:id="@+id/btn_list"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="List all" />
+            android:text="Refresh" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/txt_res"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/lst_all"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:scrollbars="vertical"
-        android:singleLine="false"
-        android:text="" />
+        android:layout_height="match_parent" />
 </LinearLayout>
