@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateAccounts() {
-        Cursor c = accountHelper.listall();
+        Cursor c = accountHelper.listAll();
         uList = new ArrayList<>();
         if (c.moveToFirst()) {
             do {

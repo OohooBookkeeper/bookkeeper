@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class AccountHelper extends SQLiteOpenHelper {
-    public static final String CREATE = "create table Account(id integer primary key autoincrement, " +
+    private static final String CREATE = "create table Account(id integer primary key autoincrement, " +
             "username text, password text, question integer, answer text, " +
             "patternenabled integer, pattern text, defaultlogin integer default 1)";
     private Context aContext;
@@ -16,7 +16,6 @@ public class AccountHelper extends SQLiteOpenHelper {
     public static final int PASSWD = 1; // 用于defaultlogin字段，表示默认用密码登录
     public static final int PATTERN = 2; // 用于defaultlogin字段，表示默认用图形密码登录
 
-    // 当前数据库版本为1，请传入1
     public AccountHelper(Context context, String name) {
         super(context, name, null, version);
         aContext = context;
@@ -69,7 +68,7 @@ public class AccountHelper extends SQLiteOpenHelper {
     }
 
     // 列出数据库中所有数据，调试时用
-    public Cursor listall() {
+    public Cursor listAll() {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.query("Account", null, null, null, null, null, null);
     }
