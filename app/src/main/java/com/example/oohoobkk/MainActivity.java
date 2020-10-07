@@ -40,12 +40,13 @@ public class MainActivity extends AppCompatActivity {
     Switch paten;
     RecyclerView list;
     List<String> uList;
+    Spinner sDL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        accountHelper = new AccountHelper(this, "account.db", null, 1);
+        accountHelper = new AccountHelper(this, "account.db");
         pat = findViewById(R.id.txt_pat);
         Button bAdd = findViewById(R.id.btn_add);
         Button bList = findViewById(R.id.btn_list);
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         paten = findViewById(R.id.switch_p);
         list = findViewById(R.id.lst_all);
         uList = new ArrayList<>();
+        sDL = findViewById(R.id.spinner_dl);
         updateAccounts();
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setAdapter(new AccountAdapter(uList));
@@ -71,12 +73,24 @@ public class MainActivity extends AppCompatActivity {
         bAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int defaultlogin;
+                String dl = sDL.getSelectedItem().toString();
+                String passwd = tPwd.getText().toString();
+                String pattern = pat.getText().toString();
+                // 出现意外情况（else）分支，仍将默认方式设为文字密码登录
+                if (dl.equals("Password"))
+                    defaultlogin = AccountHelper.PASSWD;
+                else if (dl.equals("Pattern"))
+                    defaultlogin = AccountHelper.PATTERN;
+                else
+                    defaultlogin = AccountHelper.PASSWD;
                 accountHelper.signup(tUsrn.getText().toString(),
-                        MainActivity.encrypt(tPwd.getText().toString()),
+                        passwd.isEmpty() ? "" : MainActivity.encrypt(passwd),
                         Integer.parseInt(sQuest.getSelectedItem().toString()),
                         tAns.getText().toString(),
                         paten.isChecked() ? 1 : 0,
-                        MainActivity.encrypt(pat.getText().toString())
+                        pattern.isEmpty() ? "" : MainActivity.encrypt(pattern),
+                        defaultlogin
                         );
             }
         });
@@ -96,12 +110,24 @@ public class MainActivity extends AppCompatActivity {
         bUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int defaultlogin;
+                String dl = sDL.getSelectedItem().toString();
+                String passwd = tPwd.getText().toString();
+                String pattern = pat.getText().toString();
+                // 出现意外情况（else）分支，仍将默认方式设为文字密码登录
+                if (dl.equals("Password"))
+                    defaultlogin = AccountHelper.PASSWD;
+                else if (dl.equals("Pattern"))
+                    defaultlogin = AccountHelper.PATTERN;
+                else
+                    defaultlogin = AccountHelper.KEEP;
                 accountHelper.update(tUsrn.getText().toString(),
-                        MainActivity.encrypt(tPwd.getText().toString()),
+                        passwd.isEmpty() ? "" : MainActivity.encrypt(passwd),
                         Integer.parseInt(sQuest.getSelectedItem().toString()),
                         tAns.getText().toString(),
                         paten.isChecked() ? 1 : 0,
-                        MainActivity.encrypt(pat.getText().toString())
+                        pattern.isEmpty() ? "" : MainActivity.encrypt(pattern),
+                        defaultlogin
                         );
             }
         });
@@ -118,13 +144,15 @@ public class MainActivity extends AppCompatActivity {
                 String ans = c.getString(c.getColumnIndex("answer"));
                 int pte = c.getInt(c.getColumnIndex("patternenabled"));
                 String ptn = c.getString(c.getColumnIndex("pattern"));
+                int dlg = c.getInt(c.getColumnIndex("defaultlogin"));
                 List<String> sl = new ArrayList<>();
                 sl.add(usr);
                 sl.add(MainActivity.encrypt(pwd));
                 sl.add(String.valueOf(qst));
                 sl.add(ans);
                 sl.add(String.valueOf(pte));
-                sl.add(MainActivity.encrypt(pwd));
+                sl.add(MainActivity.encrypt(ptn));
+                sl.add(String.valueOf(dlg));
                 uList.add(sl.toString());
             } while (c.moveToNext());
         }
