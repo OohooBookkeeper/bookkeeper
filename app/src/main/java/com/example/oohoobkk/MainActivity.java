@@ -1,173 +1,201 @@
 package com.example.oohoobkk;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    private AccountHelper accountHelper;
-    EditText pat;
-    EditText tUsrn;
-    EditText tPwd;
-    Spinner sQuest;
-    EditText tAns;
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
-    Switch paten;
-    RecyclerView list;
-    List<String> uList;
-    Spinner sDL;
+    private BookHelper bookHelper;
+    EditText tID;
+    EditText tAmount;
+    EditText tCtg;
+    EditText tSctg;
+    EditText tAcc;
+    EditText tOacc;
+    EditText tTime;
+    EditText tMem;
+    EditText tTrader;
+    EditText tProject;
+    EditText tNote;
+    TextView tRes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        accountHelper = new AccountHelper(this, "account.db");
-        pat = findViewById(R.id.txt_pat);
+        bookHelper = new BookHelper(this, "book.db");
         Button bAdd = findViewById(R.id.btn_add);
         Button bList = findViewById(R.id.btn_list);
         Button bDelete = findViewById(R.id.btn_delete);
         Button bUpdate = findViewById(R.id.btn_update);
-        tUsrn = findViewById(R.id.txt_usrn);
-        tPwd = findViewById(R.id.txt_pwd);
-        sQuest = findViewById(R.id.spinner_q);
-        tAns = findViewById(R.id.txt_ans);
-        paten = findViewById(R.id.switch_p);
-        list = findViewById(R.id.lst_all);
-        uList = new ArrayList<>();
-        sDL = findViewById(R.id.spinner_dl);
-        updateAccounts();
-        list.setLayoutManager(new LinearLayoutManager(this));
-        list.setAdapter(new AccountAdapter(uList));
-        list.setItemAnimator(new DefaultItemAnimator());
-        paten.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                pat.setEnabled(isChecked);
-            }
-        });
+        Button bListTime = findViewById(R.id.btn_listtime);
+        tID = findViewById(R.id.txt_id);
+        tAmount = findViewById(R.id.txt_amount);
+        tCtg = findViewById(R.id.txt_ctg);
+        tSctg = findViewById(R.id.txt_sctg);
+        tAcc = findViewById(R.id.txt_acc);
+        tOacc = findViewById(R.id.txt_oacc);
+        tTime = findViewById(R.id.txt_time);
+        tMem = findViewById(R.id.txt_mem);
+        tTrader = findViewById(R.id.txt_tr);
+        tProject = findViewById(R.id.txt_prj);
+        tNote = findViewById(R.id.txt_note);
+        tRes = findViewById(R.id.txt_res);
         bAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int defaultlogin;
-                String dl = sDL.getSelectedItem().toString();
-                String passwd = tPwd.getText().toString();
-                String pattern = pat.getText().toString();
-                // 出现意外情况（else）分支，仍将默认方式设为文字密码登录
-                if (dl.equals("Password"))
-                    defaultlogin = AccountHelper.PASSWD;
-                else if (dl.equals("Pattern"))
-                    defaultlogin = AccountHelper.PATTERN;
-                else
-                    defaultlogin = AccountHelper.PASSWD;
-                accountHelper.signup(tUsrn.getText().toString(),
-                        passwd.isEmpty() ? "" : MainActivity.encrypt(passwd),
-                        Integer.parseInt(sQuest.getSelectedItem().toString()),
-                        tAns.getText().toString(),
-                        paten.isChecked() ? 1 : 0,
-                        pattern.isEmpty() ? "" : MainActivity.encrypt(pattern),
-                        defaultlogin
-                        );
+                Transaction t = new Transaction();
+                t.amount = Integer.parseInt(tAmount.getText().toString());
+                t.category = Integer.parseInt(tCtg.getText().toString());
+                t.subcategory = Integer.parseInt(tSctg.getText().toString());
+                t.account = Integer.parseInt(tAcc.getText().toString());
+                t.outaccount = Integer.parseInt(tOacc.getText().toString());
+                t.member = Integer.parseInt(tMem.getText().toString());
+                t.trader = Integer.parseInt(tTrader.getText().toString());
+                t.project = Integer.parseInt(tProject.getText().toString());
+                t.note = tNote.getText().toString();
+                SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
+                Date time = null;
+                try {
+                    time = f.parse(tTime.getText().toString());
+                } catch (ParseException e) {
+                    Toast.makeText(MainActivity.this, "Parse error!", Toast.LENGTH_SHORT).show();
+                } finally {
+                    if (time != null)
+                        t.time = (int) (time.getTime() / 60000);
+                    else
+                        t.time = 0;
+                    bookHelper.addTransaction(t);
+                }
             }
         });
         bList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.this.updateAccounts();
-                Objects.requireNonNull(list.getAdapter()).notifyDataSetChanged();
+                Cursor c = bookHelper.displayAllTransactions(BookHelper.NULL, false);
+                tRes.setText("");
+                if (c.moveToFirst()) {
+                    do {
+                        int id = c.getInt(c.getColumnIndex("id"));
+                        int amount = c.getInt(c.getColumnIndex("amount"));
+                        int ctg = c.getInt(c.getColumnIndex("category"));
+                        int sctg = c.getInt(c.getColumnIndex("subcategory"));
+                        int account = c.getInt(c.getColumnIndex("account"));
+                        int outaccount = c.getInt(c.getColumnIndex("outaccount"));
+                        int time = c.getInt(c.getColumnIndex("time"));
+                        int member = c.getInt(c.getColumnIndex("member"));
+                        int trader = c.getInt(c.getColumnIndex("trader"));
+                        int project = c.getInt(c.getColumnIndex("project"));
+                        String note = c.getString(c.getColumnIndex("note"));
+                        String cname = c.getString(c.getColumnIndex("cname"));
+                        String sname = c.getString(c.getColumnIndex("sname"));
+                        String aname = c.getString(c.getColumnIndex("aname"));
+                        String oaname = c.getString(c.getColumnIndex("oaname"));
+                        String mname = c.getString(c.getColumnIndex("mname"));
+                        String rname = c.getString(c.getColumnIndex("rname"));
+                        String pname = c.getString(c.getColumnIndex("pname"));
+                        String[] s = {String.valueOf(id), String.valueOf(amount), String.valueOf(ctg),
+                                    cname, String.valueOf(sctg), sname, String.valueOf(account), aname,
+                                    String.valueOf(outaccount), oaname, String.valueOf(time),
+                                    String.valueOf(member), mname, String.valueOf(trader), rname,
+                                    String.valueOf(project), pname, note};
+                        tRes.append(Arrays.toString(s));
+                        tRes.append("\n");
+                    } while (c.moveToNext());
+                }
             }
         });
+
+        bListTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText tSt = findViewById(R.id.txt_st);
+                EditText tEt = findViewById(R.id.txt_et);
+                int st = Integer.parseInt(tSt.getText().toString());
+                int et = Integer.parseInt(tEt.getText().toString());
+                Cursor c = bookHelper.displayAllTransactions(st, et, BookHelper.NULL, false);
+                Toast.makeText(MainActivity.this, String.valueOf(c.getCount()), Toast.LENGTH_SHORT).show();
+                tRes.setText("");
+                if (c.moveToFirst()) {
+                    do {
+                        int id = c.getInt(c.getColumnIndex("id"));
+                        int amount = c.getInt(c.getColumnIndex("amount"));
+                        int ctg = c.getInt(c.getColumnIndex("category"));
+                        int sctg = c.getInt(c.getColumnIndex("subcategory"));
+                        int account = c.getInt(c.getColumnIndex("account"));
+                        int outaccount = c.getInt(c.getColumnIndex("outaccount"));
+                        int time = c.getInt(c.getColumnIndex("time"));
+                        int member = c.getInt(c.getColumnIndex("member"));
+                        int trader = c.getInt(c.getColumnIndex("trader"));
+                        int project = c.getInt(c.getColumnIndex("project"));
+                        String note = c.getString(c.getColumnIndex("note"));
+                        String cname = c.getString(c.getColumnIndex("cname"));
+                        String sname = c.getString(c.getColumnIndex("sname"));
+                        String aname = c.getString(c.getColumnIndex("aname"));
+                        String oaname = c.getString(c.getColumnIndex("oaname"));
+                        String mname = c.getString(c.getColumnIndex("mname"));
+                        String rname = c.getString(c.getColumnIndex("rname"));
+                        String pname = c.getString(c.getColumnIndex("pname"));
+                        String[] s = {String.valueOf(id), String.valueOf(amount), String.valueOf(ctg),
+                                cname, String.valueOf(sctg), sname, String.valueOf(account), aname,
+                                String.valueOf(outaccount), oaname, String.valueOf(time),
+                                String.valueOf(member), mname, String.valueOf(trader), rname,
+                                String.valueOf(project), pname, note};
+                        tRes.append(Arrays.toString(s));
+                        tRes.append("\n");
+                    } while (c.moveToNext());
+                }
+            }
+        });
+
         bDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                accountHelper.delete(tUsrn.getText().toString());
+                bookHelper.deleteTransaction(Integer.parseInt(tID.getText().toString()));
             }
         });
         bUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int defaultlogin;
-                String dl = sDL.getSelectedItem().toString();
-                String passwd = tPwd.getText().toString();
-                String pattern = pat.getText().toString();
-                // 出现意外情况（else）分支，仍将默认方式设为文字密码登录
-                if (dl.equals("Password"))
-                    defaultlogin = AccountHelper.PASSWD;
-                else if (dl.equals("Pattern"))
-                    defaultlogin = AccountHelper.PATTERN;
-                else
-                    defaultlogin = AccountHelper.KEEP;
-                accountHelper.update(tUsrn.getText().toString(),
-                        passwd.isEmpty() ? "" : MainActivity.encrypt(passwd),
-                        Integer.parseInt(sQuest.getSelectedItem().toString()),
-                        tAns.getText().toString(),
-                        paten.isChecked() ? 1 : 0,
-                        pattern.isEmpty() ? "" : MainActivity.encrypt(pattern),
-                        defaultlogin
-                        );
+                int ID = Integer.parseInt(tID.getText().toString());
+                Transaction t = new Transaction();
+                t.amount = Integer.parseInt(tAmount.getText().toString());
+                t.category = Integer.parseInt(tCtg.getText().toString());
+                t.subcategory = Integer.parseInt(tSctg.getText().toString());
+                t.account = Integer.parseInt(tAcc.getText().toString());
+                t.outaccount = Integer.parseInt(tOacc.getText().toString());
+                t.member = Integer.parseInt(tMem.getText().toString());
+                t.trader = Integer.parseInt(tTrader.getText().toString());
+                t.project = Integer.parseInt(tProject.getText().toString());
+                t.note = tNote.getText().toString();
+                SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
+                Date time = null;
+                try {
+                    time = f.parse(tTime.getText().toString());
+                } catch (ParseException e) {
+                    Toast.makeText(MainActivity.this, "Parse error!", Toast.LENGTH_SHORT).show();
+                } finally {
+                    if (time != null)
+                        t.time = (int) (time.getTime() / 60000);
+                    else
+                        t.time = 0;
+                    bookHelper.updateTransaction(ID, t);
+                }
             }
         });
-    }
-
-    public void updateAccounts() {
-        Cursor c = accountHelper.listAll();
-        uList = new ArrayList<>();
-        if (c.moveToFirst()) {
-            do {
-                String usr = c.getString(c.getColumnIndex("username"));
-                String pwd = c.getString(c.getColumnIndex("password"));
-                int qst = c.getInt(c.getColumnIndex("question"));
-                String ans = c.getString(c.getColumnIndex("answer"));
-                int pte = c.getInt(c.getColumnIndex("patternenabled"));
-                String ptn = c.getString(c.getColumnIndex("pattern"));
-                int dlg = c.getInt(c.getColumnIndex("defaultlogin"));
-                List<String> sl = new ArrayList<>();
-                sl.add(usr);
-                sl.add(MainActivity.encrypt(pwd));
-                sl.add(String.valueOf(qst));
-                sl.add(ans);
-                sl.add(String.valueOf(pte));
-                sl.add(MainActivity.encrypt(ptn));
-                sl.add(String.valueOf(dlg));
-                uList.add(sl.toString());
-            } while (c.moveToNext());
-        }
-        list.setAdapter(new AccountAdapter(uList));
-    }
-
-    public static String encrypt(String str) {
-        byte[] encrypted = null;
-        try {
-            MessageDigest md5 = MessageDigest.getInstance("md5");
-            encrypted = md5.digest(str.getBytes());
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return new BigInteger(1, encrypted).toString(16);
     }
 
 }

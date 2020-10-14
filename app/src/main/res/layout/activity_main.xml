@@ -9,42 +9,78 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
-            android:id="@+id/label_usrn"
+            android:id="@+id/label_id"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textAlignment="center"
-            android:text="Username"
+            android:text="ID"
             />
 
         <EditText
-            android:id="@+id/txt_usrn"
+            android:id="@+id/txt_id"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
+            android:layout_weight="1"
             android:inputType="text"
             android:autofillHints=""
             tools:ignore="LabelFor"
             />
+
+        <TextView
+            android:id="@+id/label_amount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:text="Amount"
+            />
+
+        <EditText
+            android:id="@+id/txt_amount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:autofillHints=""
+            android:inputType="numberSigned"
+            tools:ignore="LabelFor" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
-            android:id="@+id/label_pwd"
+            android:id="@+id/label_ctg"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textAlignment="center"
-            android:text="Password"
+            android:text="Category"
             />
 
         <EditText
-            android:id="@+id/txt_pwd"
+            android:id="@+id/txt_ctg"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:inputType="textPassword"
+            android:layout_weight="1"
+            android:inputType="text"
+            android:autofillHints=""
+            tools:ignore="LabelFor"
+            />
+        <TextView
+            android:id="@+id/label_sctg"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:text="Subcategory"
+            />
+
+        <EditText
+            android:id="@+id/txt_sctg"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="text"
             android:autofillHints=""
             tools:ignore="LabelFor"
             />
@@ -54,34 +90,37 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
-            android:id="@+id/label_q"
+            android:id="@+id/label_acc"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:textAlignment="center"
-            android:text="Question"
+            android:text="Account"
             />
 
-        <Spinner
-            android:id="@+id/spinner_q"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:entries="@array/question_id"
-            android:textAlignment="gravity" />
-        <TextView
-            android:id="@+id/label_a"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:textAlignment="center"
-            android:text="Answer"
-            />
         <EditText
-            android:id="@+id/txt_ans"
+            android:id="@+id/txt_acc"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
+            android:layout_weight="1"
+            android:inputType="text"
+            android:autofillHints=""
+            tools:ignore="LabelFor"
+            />
+        <TextView
+            android:id="@+id/label_oacc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:text="Outaccount"
+            />
+
+        <EditText
+            android:id="@+id/txt_oacc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:inputType="text"
             android:autofillHints=""
             tools:ignore="LabelFor"
@@ -89,53 +128,138 @@
     </LinearLayout>
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/label_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:text="Time"
+            />
+
+        <EditText
+            android:id="@+id/txt_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:autofillHints=""
+            android:inputType="date|time"
+            tools:ignore="LabelFor" />
+        <TextView
+            android:id="@+id/label_mem"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:text="Member"
+            />
+
+        <EditText
+            android:id="@+id/txt_mem"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="text"
+            android:autofillHints=""
+            tools:ignore="LabelFor"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/label_tr"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:text="Trader"
+            />
+
+        <EditText
+            android:id="@+id/txt_tr"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="text"
+            android:autofillHints=""
+            tools:ignore="LabelFor"
+            />
+        <TextView
+            android:id="@+id/label_prj"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:text="Project"
+            />
+
+        <EditText
+            android:id="@+id/txt_prj"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="text"
+            android:autofillHints=""
+            tools:ignore="LabelFor"
+            />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/txt_note"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
-        <TextView
-            android:id="@+id/label_p"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:textAlignment="center"
-            android:text="Pattern"
-            />
+        android:autofillHints=""
+        android:inputType="text"
+        android:maxLines="5"
+        android:minLines="1"
+        android:singleLine="false"
+        tools:ignore="LabelFor" />
 
-        <Switch
-            android:id="@+id/switch_p"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/label_st"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            tools:checked="false"
-            tools:ignore="UseSwitchCompatOrMaterialXml" />
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:text="Start"
+            />
 
         <EditText
-            android:id="@+id/txt_pat"
+            android:id="@+id/txt_st"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:autofillHints=""
-            android:enabled="false"
+            android:layout_weight="1"
             android:inputType="text"
-            tools:ignore="LabelFor" />
-
-
-        <TextView
-            android:id="@+id/label_dl"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:textAlignment="center"
-            android:text="Default"
+            android:autofillHints=""
+            tools:ignore="LabelFor"
             />
-        <Spinner
-            android:id="@+id/spinner_dl"
+        <TextView
+            android:id="@+id/label_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="5"
-            android:entries="@array/default_login"
-            android:textAlignment="gravity" />
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:text="End"
+            />
+
+        <EditText
+            android:id="@+id/txt_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="text"
+            android:autofillHints=""
+            tools:ignore="LabelFor"
+            />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -162,11 +286,17 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Refresh" />
+            android:text="Show" />
+        <Button
+            android:id="@+id/btn_listtime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="YES" />
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/lst_all"
+    <TextView
+        android:id="@+id/txt_res"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>
