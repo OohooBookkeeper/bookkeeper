@@ -87,7 +87,7 @@ public class BookHelper extends SQLiteOpenHelper {
 
     // 显示所有收入/支出或所有转账，orderBy为排序依据，desc规定结果是否降序排序
     @SuppressLint("Recycle")
-    public Cursor displayAllTransactions(int orderBy, Boolean desc) {
+    public Cursor displayAllTransactions(int orderBy, boolean desc) {
         SQLiteDatabase db = this.getReadableDatabase();
         String sDesc = desc ? "desc" : "";
         String sOrderBy;
@@ -131,7 +131,7 @@ public class BookHelper extends SQLiteOpenHelper {
 
     // 显示指定时间段所有收入/支出或所有转账，startTime为开始时间，endTime为结束时间，orderBy为排序依据，desc规定结果是否降序排序
     @SuppressLint("Recycle")
-    public Cursor displayAllTransactions(int startTime, int endTime, int orderBy, Boolean desc) {
+    public Cursor displayAllTransactions(int startTime, int endTime, int orderBy, boolean desc) {
         SQLiteDatabase db = this.getReadableDatabase();
         String sDesc = desc ? "desc" : "";
         String sOrderBy;
@@ -317,7 +317,7 @@ public class BookHelper extends SQLiteOpenHelper {
     }
 
     // 检查某条记录是否存在
-    public Boolean exists(int table, String field, String value) {
+    public boolean exists(int table, String field, String value) {
         SQLiteDatabase db = this.getReadableDatabase();
         @SuppressLint("Recycle") Cursor c = db.query(getTableStr(table), new String[]{field}, field + " = ?", new String[]{value}, null, null, null);
         return c.getCount() > 0;
@@ -353,7 +353,7 @@ public class BookHelper extends SQLiteOpenHelper {
         return s;
     }
 
-    // 列出一张表中所有数据，调试时用，若表不存在则返回null
+    // 列出一张表中所有数据，若表不存在则返回null
     public Cursor listAll(int table) {
         SQLiteDatabase db = this.getReadableDatabase();
         String s = getTableStr(table);
