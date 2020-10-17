@@ -196,6 +196,19 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        Cursor c = bookHelper.listAllSubcategory();
+        tRes.setText("");
+        if (c.moveToFirst()) {
+            do {
+                int category = c.getInt(c.getColumnIndex("category"));
+                String cname = c.getString(c.getColumnIndex("cname"));
+                int subcategory = c.getInt(c.getColumnIndex("subcategory"));
+                String sname = c.getString(c.getColumnIndex("sname"));
+                String[] s = {String.valueOf(category), cname, String.valueOf(subcategory), sname};
+                tRes.append(Arrays.toString(s));
+                tRes.append("\n");
+            } while (c.moveToNext());
+        }
     }
 
 }

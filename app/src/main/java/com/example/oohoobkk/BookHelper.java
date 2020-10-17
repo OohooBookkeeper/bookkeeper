@@ -22,6 +22,8 @@ public class BookHelper extends SQLiteOpenHelper {
     private static final String CREATE_PROJECT = "create table Project(project integer primary key autoincrement, name text)";
     private static final String[] CREATE = {CREATE_TRANSACTION, CREATE_CATEGORY, CREATE_SUBCATEGORY,
             CREATE_ACCOUNT, CREATE_MEMBER, CREATE_TRADER, CREATE_PROJECT};
+    private static final String LINK_CATEGORY = "select S.category, C.name as cname, S.subcategory, S.name as sname" +
+            " from Subcategory as S left join Category as C on S.category = C.category";
     private Context context;
     private static final int version = 1;
 
@@ -358,6 +360,12 @@ public class BookHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String s = getTableStr(table);
         return db.query(s, null, null, null, null, null, null);
+    }
+
+    // 将分类表和子分类表连接起来，并列出所有记录
+    public Cursor listAllSubcategory() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery(LINK_CATEGORY, null);
     }
 
     @Override
