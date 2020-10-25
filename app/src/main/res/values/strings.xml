@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">jizhangdemo</string>
+    <string name="welcome">你好，欢迎来到芜湖记账！</string>
+    <string name="input_username">请输入用户名</string>
+    <string name="hint1">如需其他登录方式请在设置中修改</string>
+    <string name="graph_login">图形密码登录</string>
+    <string name="password_login">密码登录</string>
+    <string name="register">注册账号</string>
+    <string name="back">退回</string>
+    <string name="password_login_interface">账号密码登录</string>
+    <string name="input_password">请输入密码</string>
+    <string name="login">登录</string>
+    <string name="other_login">其他方式登录</string>
+    <string name="forget_password">忘记密码？</string>
+    <string name="user_register">用户注册</string>
+    <string name="repeat_password">请重复输入密码</string>
+    <string name="hint2">密码应为8到16位并包含字母与数字</string>
+    <string name="hint3">请保证两次输入同一密码</string>
+    <string name="choose_one_question">请选择一个密保问题</string>
+    <string name="input_answer">请输入问题的答案</string>
+    <string name="question_1">你的生日？</string>
+    <string name="register_2">注册</string>
+    <string name="find_password">找回密码</string>
+    <string name="hint4">为了保证您的账户安全，1天只能操作1次，否则账户将会被锁定无法登录</string>
+    <string name="next">下一步</string>
+    <string name="input_password_question">请验证密保问题</string>
+    <string name="hint5">请输入密保问题的正确答案</string>
+    <string name="password_question">你父亲的名字是？</string>
+    <string name="confirm">确认</string>
+    <string name="reset_password">重新设置密码</string>
+    <string name="hint6">8到20个字符，不可以是纯数字</string>
+    <string name="finish">完成</string>
+</resources>

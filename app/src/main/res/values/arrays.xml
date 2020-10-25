@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string-array name="password_question">
+        <item>您的父亲的名字</item>
+        <item>您的母亲的名字</item>
+        <item>您的生日</item>
+    </string-array>
+    
+</resources>

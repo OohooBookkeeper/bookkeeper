@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/add_transfer_et_money"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:inputType="numberDecimal"
+        android:textSize="24sp"
+        android:textColor="#1571BA"
+        android:hint="输入金额"
+        android:padding="10dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="选择转出账户"
+            android:layout_marginLeft="20dp"
+            android:textSize="20sp"/>
+
+        <com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner
+            android:id="@+id/add_transfer_spinner_account_out"
+            style="@style/Material.SpinnerStyle"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="80dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="选择转入账户"
+            android:layout_marginLeft="20dp"
+            android:textSize="20sp"/>
+
+        <com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner
+            android:id="@+id/add_transfer_spinner_account_in"
+            style="@style/Material.SpinnerStyle"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="80dp"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp">
+
+        <TextView
+            android:id="@+id/add_transfer_tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="请选择时间"
+            android:layout_marginLeft="20dp"
+            android:textSize="20sp"/>
+
+        <com.xuexiang.xui.widget.alpha.XUIAlphaButton
+            android:id="@+id/add_transfer_btn_picker_time"
+            style="@style/Button.Primary.wrap"
+            android:layout_width="wrap_content"
+            android:text="时间"
+            android:layout_toRightOf="@id/add_transfer_tv_time"
+            android:layout_marginLeft="100dp"/>
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/add_transfer_et_remark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:layout_marginTop="40dp"
+        android:hint="请填写备注"
+        android:padding="10dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="40dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="请选择成员"
+            android:textSize="20sp"/>
+
+        <com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner
+            android:id="@+id/add_transfer_spinner_member"
+            style="@style/Material.SpinnerStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="60dp"/>
+
+        <com.xuexiang.xui.widget.alpha.XUIAlphaButton
+            android:id="@+id/add_transfer_btn_member_enable"
+            style="@style/Button.Primary.wrap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="不选成员"
+            android:layout_marginLeft="30dp"/>
+
+    </LinearLayout>
+
+    <com.xuexiang.xui.widget.alpha.XUIAlphaButton
+        android:id="@+id/add_transfer_btn_save"
+        style="@style/Button.Primary.wrap"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:text="保存"
+        android:textSize="24sp"/>
+
+</LinearLayout>

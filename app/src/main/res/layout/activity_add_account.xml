@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.AddAccountActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/add_fl_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/add_top_bar"/>
+
+            <LinearLayout
+                android:id="@+id/add_top_bar"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_alignParentTop="true"
+                android:orientation="horizontal"
+                android:background="#F2F2F8">
+
+                <RelativeLayout
+                    android:id="@+id/add_top_bar_1_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/add_top_bar_in"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="center"
+                        android:layout_marginTop="2dp"
+                        android:text="收入"
+                        android:textColor="#000000"
+                        android:textSize="20sp"/>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="0.5dp"
+                    android:layout_height="match_parent"
+                    android:background="#000000"/>
+
+                <RelativeLayout
+                    android:id="@+id/add_top_bar_2_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/add_top_bar_out"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="center"
+                        android:layout_marginTop="2dp"
+                        android:text="支出"
+                        android:textColor="#000000"
+                        android:textSize="20sp"/>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="0.5dp"
+                    android:layout_height="match_parent"
+                    android:background="#000000"/>
+
+                <RelativeLayout
+                    android:id="@+id/add_top_bar_3_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/add_top_bar_transfer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="center"
+                        android:layout_marginTop="2dp"
+                        android:text="转账"
+                        android:textColor="#000000"
+                        android:textSize="20sp"/>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="0.5dp"
+                    android:layout_height="match_parent"
+                    android:background="#000000"/>
+
+                <RelativeLayout
+                    android:id="@+id/add_top_bar_4_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/add_top_bar_template"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="center"
+                        android:layout_marginTop="2dp"
+                        android:text="模板"
+                        android:textColor="#000000"
+                        android:textSize="20sp"/>
+                </RelativeLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#000000"
+                android:layout_below="@id/add_top_bar"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

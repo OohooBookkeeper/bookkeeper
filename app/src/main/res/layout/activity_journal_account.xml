@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.JournalAccountActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:padding="15dp">
+
+            <LinearLayout
+                android:id="@+id/time_select"
+                android:layout_width="280dp"
+                android:layout_height="30dp">
+                <Button
+                    android:id="@+id/btn_DateStart"
+                    android:background="@android:color/transparent"
+                    android:textSize="15sp"
+                    android:text="2020年12月12日"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_arrow_right"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@id/btn_DateStart"/>
+
+                <Button
+                    android:id="@+id/btn_DateEnd"
+                    android:textSize="15sp"
+                    android:background="@android:color/transparent"
+                    android:text="2020年12月12日"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@id/btn_DateStart"/>
+
+            </LinearLayout>
+            
+            <TextView
+                android:id="@+id/tv_sum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="结余"
+                android:textSize="30sp"
+                android:textColor="#DFAB0F"
+                android:layout_below="@id/time_select"/>
+
+            <TextView
+                android:id="@+id/tv_num_sum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="300.00"
+                android:textSize="30sp"
+                android:textColor="#DFAB0F"
+                android:layout_toRightOf="@id/tv_sum"
+                android:layout_marginLeft="50dp"
+                android:layout_below="@id/time_select"/>
+
+            <LinearLayout
+                android:id="@+id/ll_out"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_sum"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_out"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="支出"
+                    android:textSize="24sp"
+                    android:textColor="#DF1111"
+                    android:layout_marginLeft="40dp"/>
+
+                <TextView
+                    android:id="@+id/tv_num_out"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="-150.00"
+                    android:textSize="24sp"
+                    android:textColor="#DF1111"
+                    android:layout_marginLeft="40dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_in"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_sum"
+                android:layout_toRightOf="@id/ll_out"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_in"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="收入"
+                    android:textSize="24sp"
+                    android:textColor="#20BD27"
+                    android:layout_marginLeft="60dp"/>
+
+                <TextView
+                    android:id="@+id/tv_num_in"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="+450.00"
+                    android:textSize="24sp"
+                    android:textColor="#20BD27"
+                    android:layout_marginLeft="60dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/select_how_to_show"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ll_out"
+                android:orientation="horizontal"
+                android:layout_marginTop="40dp"
+                android:padding="10dp">
+
+                <com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner
+                    android:id="@+id/spinner_select_time"
+                    style="@style/Material.SpinnerStyle"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content" />
+
+                <com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner
+                    android:id="@+id/spinner_select_category"
+                    style="@style/Material.SpinnerStyle"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/btn_select_account"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:text="账户"
+                    android:textColor="#000000"
+                    android:gravity="center"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/select_how_to_show"
+                android:orientation="vertical">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</FrameLayout>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:padding="5dp">
+    
+    <TextView
+        android:id="@+id/tv_day"
+        android:layout_width="30dp"
+        android:layout_height="25dp"
+        android:text="18日"
+        android:textSize="10sp"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/tv_day_of_week"
+        android:layout_width="30dp"
+        android:layout_height="25dp"
+        android:layout_below="@id/tv_day"
+        android:text="周一"
+        android:gravity="center"
+        android:textSize="10sp"/>
+    
+    <TextView
+        android:id="@+id/tv_second_category"
+        android:layout_width="60dp"
+        android:layout_height="25dp"
+        android:layout_toRightOf="@id/tv_day"
+        android:layout_marginLeft="30dp"
+        android:text="兼职工资"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="30dp"
+        android:layout_height="25dp"
+        android:layout_toRightOf="@id/tv_day_of_week"
+        android:layout_below="@id/tv_second_category"
+        android:layout_marginLeft="30dp"
+        android:text="22:18"
+        android:textSize="10sp"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/tv_account"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_toRightOf="@id/tv_time"
+        android:layout_below="@id/tv_second_category"
+        android:text="微信"
+        android:textSize="10sp"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/tv_remark"
+        android:layout_width="150dp"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/tv_second_category"
+        android:layout_marginLeft="30dp"
+        android:text="备注"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/tv_money"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:layout_toRightOf="@id/tv_remark"
+        android:text="100.00"
+        android:gravity="center"/>
+
+</RelativeLayout>
