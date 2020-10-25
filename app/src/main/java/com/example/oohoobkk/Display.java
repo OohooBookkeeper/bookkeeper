@@ -304,7 +304,7 @@ public class Display {
         return data;
     }
 
-    // 获取流水展示的数据，按季度、月、周、日、账户、成员、商家、项目划分
+    // 获取流水展示的数据，按季度、月、周、日、成员、商家、项目划分
     public Map<Integer, List<Transaction>> displayBy(Date startDate, Date endDate, int type) {
         Map<Integer, List<Transaction>> srcMap;
         boolean special = false;
@@ -315,9 +315,6 @@ public class Display {
                 break;
             case Display.MONTH:
                 srcMap = this.tByDate;
-                break;
-            case Display.ACCOUNT:
-                srcMap = this.tByAccount;
                 break;
             case Display.MEMBER:
                 srcMap = this.tByMember;
@@ -429,6 +426,37 @@ public class Display {
                     }
                 }
             }
+        }
+        return data;
+    }
+
+    // 获取流水展示的数据，按支付账户划分，可选择年度统计或月度统计
+    // month表示是否月度统计，true为月度统计（键是1970年 1月至今经过的月数），false为年度统计（键是年份）
+    public Map<Integer, Map<Integer, List<Transaction>>> displayByAccount(Date startDate, Date endDate, boolean month) {
+        Map<Integer, Map<Integer, List<Transaction>>> data = new HashMap<>();
+        for (int account : this.tByAccount.keySet()) {
+            Map<Integer, List<Transaction>> dateMap = new HashMap<>();
+            for (Transaction t : tByAccount.get(account)) {
+                Date d = new Date((long) t.time * 60000);
+                Calendar c = Calendar.getInstance();
+                c.setTime(d);
+                int yearPassed = c.get(Calendar.YEAR) - 1970;
+                int monthPassed = c.get(Calendar.MONTH) - Calendar.JANUARY;
+                int key;
+                if (month) {
+                    key = yearPassed * 12 + monthPassed;
+                } else {
+                    key = c.get(Calendar.YEAR);
+                }
+                if (dateMap.containsKey(key)) {
+                    dateMap.get(key).add(t);
+                } else {
+                    List<Transaction> tList = new LinkedList<>();
+                    tList.add(t);
+                    dateMap.put(key, tList);
+                }
+            }
+            data.put(account, dateMap);
         }
         return data;
     }
