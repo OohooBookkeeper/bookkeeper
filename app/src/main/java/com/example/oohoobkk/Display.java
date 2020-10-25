@@ -259,8 +259,7 @@ public class Display {
                 m = expenseByCtg;
                 break;
             default:
-                m = null;
-                break;
+                throw new IllegalStateException("Unexpected value: " + by);
         }
         return m != null ? (m.containsKey(value) ? m.get(value) : null) : null;
     }
@@ -305,6 +304,84 @@ public class Display {
         return data;
     }
 
+    // 获取流水展示的数据，按季度、月、周、日、账户、成员、商家、项目划分
+    public Map<Integer, List<Transaction>> displayBy(Date startDate, Date endDate, int type) {
+        Map<Integer, List<Transaction>> srcMap;
+        boolean special = false;
+        switch (type) {
+            case Display.DATE: case Display.WEEK: case Display.QUARTER:
+                srcMap = this.tByDate;
+                special = true;
+                break;
+            case Display.MONTH:
+                srcMap = this.tByDate;
+                break;
+            case Display.ACCOUNT:
+                srcMap = this.tByAccount;
+                break;
+            case Display.MEMBER:
+                srcMap = this.tByMember;
+                break;
+            case Display.TRADER:
+                srcMap = this.tByTrader;
+                break;
+            case Display.PROJECT:
+                srcMap = this.tByProject;
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + type);
+        }
+        Map<Integer, List<Transaction>> data = new HashMap<>();
+        if (special) {
+            for (int by : srcMap.keySet()) {
+                for (Transaction t : srcMap.get(by)) {
+                    Date d = new Date(t.time * 60000);
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(d);
+                    if (!d.before(startDate) && !d.after(endDate)) {
+                        int key;
+                        switch (type) {
+                            case Display.DATE:
+                                key = by * 100 + c.get(Calendar.DATE);
+                                break;
+                            case Display.WEEK:
+                                key = c.get(Calendar.YEAR) * 100 + c.get(Calendar.WEEK_OF_YEAR);
+                                break;
+                            case Display.QUARTER:
+                                key = by / 3;
+                                break;
+                            default:
+                                throw new IllegalStateException("Unexpected value: " + type);
+                        }
+                        if (data.containsKey(key)) {
+                            data.get(key).add(t);
+                        } else {
+                            List<Transaction> tList = new LinkedList<>();
+                            tList.add(t);
+                            data.put(key, tList);
+                        }
+                    }
+                }
+            }
+        } else {
+            for (int by : srcMap.keySet()) {
+                for (Transaction t : srcMap.get(by)) {
+                    Date d = new Date(t.time * 60000);
+                    if (!d.before(startDate) && !d.after(endDate)) {
+                        if (data.containsKey(by)) {
+                            data.get(by).add(t);
+                        } else {
+                            List<Transaction> tList = new LinkedList<>();
+                            tList.add(t);
+                            data.put(by, tList);
+                        }
+                    }
+                }
+            }
+        }
+        return data;
+    }
+
     // 获取流水展示的数据，按一级分类或二级分类以及分类的类型（收入、支出、转账）划分
     // sub表示是否按二级分类展示，type表示分类的类型，比如如果传入Transaction.EXPENSE，则仅返回支出分类的数据
     public Map<Integer, List<Transaction>> displayByCtg(Date startDate, Date endDate, boolean sub, int type) {
@@ -321,8 +398,7 @@ public class Display {
                     srcMap = this.transferBySctg;
                     break;
                 default:
-                    srcMap = null;
-                    break;
+                    throw new IllegalStateException("Unexpected value: " + type);
             }
         } else {
             switch(type) {
@@ -336,12 +412,9 @@ public class Display {
                     srcMap = this.transferByCtg;
                     break;
                 default:
-                    srcMap = null;
-                    break;
+                    throw new IllegalStateException("Unexpected value: " + type);
             }
         }
-        if (srcMap == null)
-            return null;
         Map<Integer, List<Transaction>> data = new HashMap<>();
         for (int by : srcMap.keySet()) {
             for (Transaction t : srcMap.get(by)) {
