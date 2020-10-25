@@ -85,7 +85,7 @@ public class Display {
         tByProject = new HashMap<>();
         for (Transaction t : transactions) {
             // 按时间划分账目
-            Date d = new Date(t.time * 60000);
+            Date d = new Date((long) t.time * 60000);
             int year, month, monthPassed;
             Calendar c = Calendar.getInstance();
             c.setTime(d);
@@ -280,7 +280,7 @@ public class Display {
             int monthsPassedOfEndDate = (endYear - 1970) * 12 + endMonth - Calendar.JANUARY;
             if (monthsPassed >= monthsPassedOfStartDate && monthsPassed <= monthsPassedOfEndDate && tByDate.containsKey(monthsPassed)) {
                 for (Transaction t : tByDate.get(monthsPassed)) {
-                    Date d = new Date(t.time * 60000);
+                    Date d = new Date((long) t.time * 60000);
                     if (!d.before(startDate) && !d.after(endDate)) {
                         int year = monthsPassed / 12;
                         int month = monthsPassed % 12;
@@ -335,7 +335,7 @@ public class Display {
         if (special) {
             for (int by : srcMap.keySet()) {
                 for (Transaction t : srcMap.get(by)) {
-                    Date d = new Date(t.time * 60000);
+                    Date d = new Date((long) t.time * 60000);
                     Calendar c = Calendar.getInstance();
                     c.setTime(d);
                     if (!d.before(startDate) && !d.after(endDate)) {
@@ -366,7 +366,7 @@ public class Display {
         } else {
             for (int by : srcMap.keySet()) {
                 for (Transaction t : srcMap.get(by)) {
-                    Date d = new Date(t.time * 60000);
+                    Date d = new Date((long )t.time * 60000);
                     if (!d.before(startDate) && !d.after(endDate)) {
                         if (data.containsKey(by)) {
                             data.get(by).add(t);
@@ -418,7 +418,7 @@ public class Display {
         Map<Integer, List<Transaction>> data = new HashMap<>();
         for (int by : srcMap.keySet()) {
             for (Transaction t : srcMap.get(by)) {
-                Date d = new Date(t.time * 60000);
+                Date d = new Date((long )t.time * 60000);
                 if (!d.before(startDate) && !d.after(endDate)) {
                     if (data.containsKey(by)) {
                         data.get(by).add(t);

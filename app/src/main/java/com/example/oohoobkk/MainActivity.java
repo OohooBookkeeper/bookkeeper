@@ -10,11 +10,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -85,6 +88,59 @@ public class MainActivity extends AppCompatActivity {
         bList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                DateFormat f = SimpleDateFormat.getDateTimeInstance();
+                tRes.setText("");
+                Display dis = new Display(MainActivity.this.bookHelper);
+                Map<Integer, Map<Integer, List<Transaction>>> map = dis.displayByYear(new Date(0), new Date());
+                for (Map<Integer, List<Transaction>> monthMaps : map.values()) {
+                    for (List<Transaction> tList : monthMaps.values()) {
+                        for (Transaction t : tList) {
+                            Date d = new Date();
+                            d.setTime((long) t.time * 60000);
+                            StringBuilder str = new StringBuilder();
+                            str.append(t.id);
+                            str.append(", ");
+                            str.append(t.amount);
+                            str.append(", ");
+                            str.append(t.category);
+                            str.append(", ");
+                            str.append(t.cname == null ? "NULL" : t.cname);
+                            str.append(", ");
+                            str.append(t.subcategory);
+                            str.append(", ");
+                            str.append(t.sname == null ? "NULL" : t.sname);
+                            str.append(", ");
+                            str.append(t.account);
+                            str.append(", ");
+                            str.append(t.aname == null ? "NULL" : t.aname);
+                            str.append(", ");
+                            str.append(t.outaccount);
+                            str.append(", ");
+                            str.append(t.oaname == null ? "NULL" : t.oaname);
+                            str.append(", ");
+                            str.append(t.type);
+                            str.append(", ");
+                            str.append(d.toString());
+                            str.append(", ");
+                            str.append(t.member);
+                            str.append(", ");
+                            str.append(t.mname);
+                            str.append(", ");
+                            str.append(t.trader);
+                            str.append(", ");
+                            str.append(t.rname);
+                            str.append(", ");
+                            str.append(t.project);
+                            str.append(", ");
+                            str.append(t.pname);
+                            str.append(", ");
+                            str.append(t.note);
+                            str.append("\n");
+                            tRes.append(str.toString());
+                        }
+                    }
+                }
+                /*
                 Cursor c = bookHelper.displayAllTransactions(BookHelper.NULL, false);
                 tRes.setText("");
                 if (c.moveToFirst()) {
@@ -116,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
                         tRes.append("\n");
                     } while (c.moveToNext());
                 }
+                 */
             }
         });
 
@@ -124,39 +181,46 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 EditText tSt = findViewById(R.id.txt_st);
                 EditText tEt = findViewById(R.id.txt_et);
-                int st = Integer.parseInt(tSt.getText().toString());
-                int et = Integer.parseInt(tEt.getText().toString());
-                Cursor c = bookHelper.displayAllTransactions(st, et, BookHelper.NULL, false);
-                Toast.makeText(MainActivity.this, String.valueOf(c.getCount()), Toast.LENGTH_SHORT).show();
-                tRes.setText("");
-                if (c.moveToFirst()) {
-                    do {
-                        int id = c.getInt(c.getColumnIndex("id"));
-                        int amount = c.getInt(c.getColumnIndex("amount"));
-                        int ctg = c.getInt(c.getColumnIndex("category"));
-                        int sctg = c.getInt(c.getColumnIndex("subcategory"));
-                        int account = c.getInt(c.getColumnIndex("account"));
-                        int outaccount = c.getInt(c.getColumnIndex("outaccount"));
-                        int time = c.getInt(c.getColumnIndex("time"));
-                        int member = c.getInt(c.getColumnIndex("member"));
-                        int trader = c.getInt(c.getColumnIndex("trader"));
-                        int project = c.getInt(c.getColumnIndex("project"));
-                        String note = c.getString(c.getColumnIndex("note"));
-                        String cname = c.getString(c.getColumnIndex("cname"));
-                        String sname = c.getString(c.getColumnIndex("sname"));
-                        String aname = c.getString(c.getColumnIndex("aname"));
-                        String oaname = c.getString(c.getColumnIndex("oaname"));
-                        String mname = c.getString(c.getColumnIndex("mname"));
-                        String rname = c.getString(c.getColumnIndex("rname"));
-                        String pname = c.getString(c.getColumnIndex("pname"));
-                        String[] s = {String.valueOf(id), String.valueOf(amount), String.valueOf(ctg),
-                                cname, String.valueOf(sctg), sname, String.valueOf(account), aname,
-                                String.valueOf(outaccount), oaname, String.valueOf(time),
-                                String.valueOf(member), mname, String.valueOf(trader), rname,
-                                String.valueOf(project), pname, note};
-                        tRes.append(Arrays.toString(s));
-                        tRes.append("\n");
-                    } while (c.moveToNext());
+                int st, et;
+                try {
+                    st = Integer.parseInt(tSt.getText().toString());
+                    et = Integer.parseInt(tEt.getText().toString());
+                    Cursor c = bookHelper.displayAllTransactions(st, et, BookHelper.NULL, false);
+                    Toast.makeText(MainActivity.this, String.valueOf(c.getCount()), Toast.LENGTH_SHORT).show();
+                    tRes.setText("");
+                    if (c.moveToFirst()) {
+                        do {
+                            int id = c.getInt(c.getColumnIndex("id"));
+                            int amount = c.getInt(c.getColumnIndex("amount"));
+                            int ctg = c.getInt(c.getColumnIndex("category"));
+                            int sctg = c.getInt(c.getColumnIndex("subcategory"));
+                            int account = c.getInt(c.getColumnIndex("account"));
+                            int outaccount = c.getInt(c.getColumnIndex("outaccount"));
+                            int time = c.getInt(c.getColumnIndex("time"));
+                            int member = c.getInt(c.getColumnIndex("member"));
+                            int trader = c.getInt(c.getColumnIndex("trader"));
+                            int project = c.getInt(c.getColumnIndex("project"));
+                            String note = c.getString(c.getColumnIndex("note"));
+                            String cname = c.getString(c.getColumnIndex("cname"));
+                            String sname = c.getString(c.getColumnIndex("sname"));
+                            String aname = c.getString(c.getColumnIndex("aname"));
+                            String oaname = c.getString(c.getColumnIndex("oaname"));
+                            String mname = c.getString(c.getColumnIndex("mname"));
+                            String rname = c.getString(c.getColumnIndex("rname"));
+                            String pname = c.getString(c.getColumnIndex("pname"));
+                            String[] s = {String.valueOf(id), String.valueOf(amount), String.valueOf(ctg),
+                                    cname, String.valueOf(sctg), sname, String.valueOf(account), aname,
+                                    String.valueOf(outaccount), oaname, String.valueOf(time),
+                                    String.valueOf(member), mname, String.valueOf(trader), rname,
+                                    String.valueOf(project), pname, note};
+                            tRes.append(Arrays.toString(s));
+                            tRes.append("\n");
+                        } while (c.moveToNext());
+                    }
+                } catch (NumberFormatException e) {
+                    Toast.makeText(MainActivity.this, "Time should not be empty!", Toast.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    Toast.makeText(MainActivity.this, "Unknown exception!", Toast.LENGTH_LONG).show();
                 }
             }
         });

@@ -118,7 +118,7 @@ public class BookHelper extends SQLiteOpenHelper {
             default:
                 sOrderBy = null;
         }
-        final String SELECT = " T.*, C.name as cname, S.name as sname, A1.name as aname, " +
+        final String SELECT = " T.*, C.name as cname, S.name as sname, C.type as [type], A1.name as aname, " +
                 "A2.name as oaname, M.name as mname, R.name as rname, P.name as pname ";
         final String FROM = " [Transaction] as T left join Category as C on T.category = C.category " +
                 "left join Subcategory as S on T.category = S.category and T.subcategory = S.subcategory " +
@@ -128,7 +128,7 @@ public class BookHelper extends SQLiteOpenHelper {
         final String SQL = "select" + SELECT + "from" + FROM;
         if (sOrderBy == null)
             return db.rawQuery(SQL, null);
-        return db.rawQuery(SQL + "order by ? " + desc, new String[]{sOrderBy});
+        return db.rawQuery(SQL + "order by ? " + sDesc, new String[]{sOrderBy});
     }
 
     // 显示指定时间段所有收入/支出或所有转账，startTime为开始时间，endTime为结束时间，orderBy为排序依据，desc规定结果是否降序排序
@@ -162,7 +162,7 @@ public class BookHelper extends SQLiteOpenHelper {
             default:
                 sOrderBy = null;
         }
-        final String SELECT = " T.*, C.name as cname, S.name as sname, A1.name as aname, " +
+        final String SELECT = " T.*, C.name as cname, S.name as sname, C.type as [type], A1.name as aname, " +
                 "A2.name as oaname, M.name as mname, R.name as rname, P.name as pname ";
         final String FROM = " [Transaction] as T left join Category as C on T.category = C.category " +
                 "left join Subcategory as S on T.category = S.category and T.subcategory = S.subcategory " +
@@ -173,7 +173,7 @@ public class BookHelper extends SQLiteOpenHelper {
         final String SQL = "select" + SELECT + "from" + FROM + "where" + WHERE;
         if (sOrderBy == null)
             return db.rawQuery(SQL, new String[]{String.valueOf(startTime), String.valueOf(endTime)});
-        return db.rawQuery(SQL + "order by ? " + desc, new String[]{String.valueOf(startTime), String.valueOf(endTime), sOrderBy});
+        return db.rawQuery(SQL + "order by ? " + sDesc, new String[]{String.valueOf(startTime), String.valueOf(endTime), sOrderBy});
     }
 
     // 删除一笔账目，通过指定账目的唯一标识号ID实现
