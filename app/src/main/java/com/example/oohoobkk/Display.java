@@ -36,6 +36,10 @@ public class Display {
     public static final int TRADER = 9;
     public static final int PROJECT = 10;
 
+    public static final int WEEK = 1;
+    public static final int MONTH = 2;
+    public static final int QUARTER = 3;
+
     // 从数据库中加载数据
     private void loadData() {
         this.transactions = new LinkedList<>();
@@ -259,6 +263,101 @@ public class Display {
                 break;
         }
         return m != null ? (m.containsKey(value) ? m.get(value) : null) : null;
+    }
+
+    // 获取流水展示的数据，按年划分
+    public Map<Integer, Map<Integer, List<Transaction>>> displayByYear(Date startDate, Date endDate) {
+        Map<Integer, Map<Integer, List<Transaction>>> data = new HashMap<>();
+        int startYear, startMonth, endYear, endMonth;
+        Calendar c = Calendar.getInstance();
+        c.setTime(startDate);
+        startYear = c.get(Calendar.YEAR);
+        startMonth = c.get(Calendar.MONTH);
+        c.setTime(endDate);
+        endYear = c.get(Calendar.YEAR);
+        endMonth = c.get(Calendar.MONTH);
+        for (int monthsPassed : this.tByDate.keySet()) {
+            int monthsPassedOfStartDate = (startYear - 1970) * 12 + startMonth - Calendar.JANUARY;
+            int monthsPassedOfEndDate = (endYear - 1970) * 12 + endMonth - Calendar.JANUARY;
+            if (monthsPassed >= monthsPassedOfStartDate && monthsPassed <= monthsPassedOfEndDate && tByDate.containsKey(monthsPassed)) {
+                for (Transaction t : tByDate.get(monthsPassed)) {
+                    Date d = new Date(t.time * 60000);
+                    if (!d.before(startDate) && !d.after(endDate)) {
+                        int year = monthsPassed / 12;
+                        int month = monthsPassed % 12;
+                        if (!data.containsKey(year)) {
+                            Map<Integer, List<Transaction>> yearData = new HashMap<>();
+                            List<Transaction> tList = new LinkedList<>();
+                            tList.add(t);
+                            yearData.put(month, tList);
+                            data.put(year, yearData);
+                        } else if (!data.containsKey(month)) {
+                            List<Transaction> tList = new LinkedList<>();
+                            tList.add(t);
+                            data.get(year).put(month, tList);
+                        } else {
+                            data.get(year).get(month).add(t);
+                        }
+                    }
+                }
+            }
+        }
+        return data;
+    }
+
+    // 获取流水展示的数据，按一级分类或二级分类以及分类的类型（收入、支出、转账）划分
+    // sub表示是否按二级分类展示，type表示分类的类型，比如如果传入Transaction.EXPENSE，则仅返回支出分类的数据
+    public Map<Integer, List<Transaction>> displayByCtg(Date startDate, Date endDate, boolean sub, int type) {
+        Map<Integer, List<Transaction>> srcMap;
+        if (sub) {
+            switch(type) {
+                case Transaction.EXPENSE:
+                    srcMap = this.expenseBySctg;
+                    break;
+                case Transaction.INCOME:
+                    srcMap = this.incomeBySctg;
+                    break;
+                case Transaction.TRANSFER:
+                    srcMap = this.transferBySctg;
+                    break;
+                default:
+                    srcMap = null;
+                    break;
+            }
+        } else {
+            switch(type) {
+                case Transaction.EXPENSE:
+                    srcMap = this.expenseByCtg;
+                    break;
+                case Transaction.INCOME:
+                    srcMap = this.incomeByCtg;
+                    break;
+                case Transaction.TRANSFER:
+                    srcMap = this.transferByCtg;
+                    break;
+                default:
+                    srcMap = null;
+                    break;
+            }
+        }
+        if (srcMap == null)
+            return null;
+        Map<Integer, List<Transaction>> data = new HashMap<>();
+        for (int by : srcMap.keySet()) {
+            for (Transaction t : srcMap.get(by)) {
+                Date d = new Date(t.time * 60000);
+                if (!d.before(startDate) && !d.after(endDate)) {
+                    if (data.containsKey(by)) {
+                        data.get(by).add(t);
+                    } else {
+                        List<Transaction> tList = new LinkedList<>();
+                        tList.add(t);
+                        data.put(by, tList);
+                    }
+                }
+            }
+        }
+        return data;
     }
 
 }
