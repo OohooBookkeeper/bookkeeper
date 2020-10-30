@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 DateFormat f = SimpleDateFormat.getDateTimeInstance();
                 tRes.setText("");
                 Display dis = new Display(MainActivity.this.bookHelper);
-                Map<Integer, Map<Integer, List<Transaction>>> map = dis.displayByYear(new Date(0), new Date());
+                Map<Integer, Map<Integer, List<Transaction>>> map = dis.displayByAccount(new Date(0), new Date(), true);
                 for (Map<Integer, List<Transaction>> monthMaps : map.values()) {
                     for (List<Transaction> tList : monthMaps.values()) {
                         for (Transaction t : tList) {
