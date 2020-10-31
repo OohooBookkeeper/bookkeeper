@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public class Transaction {
     public static final int UNSPECIFIED = 0; // 赋值给subcategory, member, trader或project，表示这些属性未指定
     public static final int NONTRANSFER = 0; // 赋值给outaccount，表示这笔账目不是转账账目
-    public BigDecimal amount;
+    public int amount;
     public int category;
     public int subcategory;
     public int account;

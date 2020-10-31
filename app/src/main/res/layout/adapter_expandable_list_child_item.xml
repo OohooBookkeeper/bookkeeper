@@ -13,33 +13,62 @@
         android:background="@drawable/xui_config_list_item_selector"
         android:orientation="horizontal">
 
-        <TextView
+        <com.xuexiang.xui.widget.textview.autofit.AutoFitTextView
             android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
+            app:aftv_enable="true"
+            android:layout_width="80dp"
             android:layout_height="match_parent"
-            android:text="9月"
+            android:maxLines="1"
+            android:text="2020年9月"
+            android:textSize="20sp"
             android:layout_gravity="start|center_vertical"
             android:padding="16dp" />
+
+        <TextView
+            android:id="@+id/tv_sum"
+            android:layout_width="65dp"
+            android:layout_height="match_parent"
+            android:text=""
+            android:textColor="#DFAB0F"
+            android:layout_gravity="start|center_vertical"
+            android:padding="16dp"/>
+
+        <com.xuexiang.xui.widget.textview.autofit.AutoFitTextView
+            android:id="@+id/tv_num_sum"
+            app:aftv_enable="true"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:maxLines="1"
+            android:text=""
+            android:textColor="#DFAB0F"
+            android:layout_gravity="start|center_vertical"
+            android:padding="16dp"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_marginLeft="220dp">
-            <TextView
+            android:layout_marginLeft="10dp">
+            <com.xuexiang.xui.widget.textview.autofit.AutoFitTextView
                 android:id="@+id/tv_in"
-                android:text="+1234.56"
+                app:aftv_enable="true"
+                android:text=""
+                android:textSize="15sp"
+                android:maxLines="1"
                 android:textColor="#20BD27"
                 android:gravity="center_vertical|start"
-                android:layout_width="match_parent"
+                android:layout_width="60dp"
                 android:layout_height="0dp"
                 android:layout_weight="1"/>
-            <TextView
+            <com.xuexiang.xui.widget.textview.autofit.AutoFitTextView
                 android:id="@+id/tv_out"
-                android:text="-1234.56"
+                app:aftv_enable="true"
+                android:maxLines="1"
+                android:text=""
+                android:textSize="15sp"
                 android:textColor="#DF1111"
                 android:gravity="center_vertical|start"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="1"/>
         </LinearLayout>
@@ -67,12 +96,12 @@
         app:el_duration="300"
         app:el_expanded="false">
 
-        <TextView
-            android:id="@+id/tv_content"
-            style="@style/TextStyle.Explain"
-            android:padding="16dp"
-            android:textColor="@color/xui_config_color_white"
-            tools:text="这里面是内容" />
+        <LinearLayout
+            android:id="@+id/ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        </LinearLayout>
 
     </com.xuexiang.xui.widget.layout.ExpandableLayout>
 

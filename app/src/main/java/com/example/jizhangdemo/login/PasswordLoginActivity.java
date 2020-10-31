@@ -26,18 +26,21 @@ public class PasswordLoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password_login);
-        Button mBtnBack = findViewById(R.id.btn_back);
+        //Button mBtnBack = findViewById(R.id.btn_back);
         Button mBtnLogin = findViewById(R.id.btn_login);
         Button mBtnOtherLogin = findViewById(R.id.btn_other_login);
         Button mBtnForgetPassword = findViewById(R.id.btn_forget_password);
         et_password_login_username = findViewById(R.id.et_password_login_username);
         et_password_login_password = findViewById(R.id.et_password_login_password);
+        /*
         mBtnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PasswordLoginActivity.this.finish();
             }
         });
+
+         */
         mBtnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

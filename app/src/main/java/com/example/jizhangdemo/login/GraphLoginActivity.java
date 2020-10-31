@@ -68,7 +68,6 @@ public class GraphLoginActivity extends AppCompatActivity implements NineSquare.
 
     @Override
     public void onPatternStarted(boolean isStarted) {
-        if(isStarted){
-        }
+
     }
 }

@@ -9,9 +9,9 @@ public class LineElement {
     private String sum;
     private String in;
     private String out;
-    private List<List<View>> bill;
+    private List<LineElementChild> bill;
 
-    public LineElement(String title,String sum,String in,String out,List<List<View>> bill){
+    public LineElement(String title,String sum,String in,String out,List<LineElementChild> bill){
         this.title = title;
         this.sum = sum;
         this.in = in;
@@ -35,7 +35,7 @@ public class LineElement {
 
     public void setOut(String out){ this.out = out;}
 
-    public List<List<View>> getBill(){ return this.bill;}
+    public List<LineElementChild> getBill(){ return this.bill;}
 
-    public void setBill(List<List<View>> bill){ this.bill = bill;}
+    public void setBill(List<LineElementChild> bill){ this.bill = bill;}
 }

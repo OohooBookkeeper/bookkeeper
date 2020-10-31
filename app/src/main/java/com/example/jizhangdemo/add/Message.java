@@ -4,9 +4,9 @@ import java.util.List;
 
 
 public class Message{
-    public List<FirstCategory> All_category ;
-    public String [] Account_name = new String[100];
-    public String [] Member_name = new String[100];
-    public String [] Trader_name = new String[100];
-    public String [] Project_name = new String[100];
+    public List<FirstCategory> All_category;
+    public List<String> Account_name;
+    public List<String> Member_name;
+    public List<String> Trader_name;
+    public List<String> Project_name;
 }

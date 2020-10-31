@@ -21,16 +21,9 @@ public class ForgetPasswordActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
-        Button mBtnBack3 = findViewById(R.id.btn_back3);
         Button mBtnFindPasswordNext = findViewById(R.id.btn_find_password_next);
         et_find_password_input_username = findViewById(R.id.et_find_password_input_username);
 
-        mBtnBack3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ForgetPasswordActivity.this.finish();
-            }
-        });
         mBtnFindPasswordNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

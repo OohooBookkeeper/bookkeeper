@@ -2,25 +2,18 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="15dp">
 
-        <com.xuexiang.xui.widget.alpha.XUIAlphaButton
-            android:id="@+id/btn_back2"
-            style="@style/Button.Primary.wrap"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/back" />
-
         <TextView
             android:id="@+id/tv_4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/btn_back2"
             android:layout_marginTop="60dp"
             android:text="@string/user_register"
             android:textSize="25sp"
@@ -32,12 +25,11 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_4"
             android:layout_marginTop="60dp"
-            android:textSize="16sp"
+            android:textSize="20sp"
             android:textColor="#000000"
             android:inputType="text"
             android:autofillHints="register_username"
             android:hint="@string/input_username"
-            android:background="#E1DCDC"
             android:padding="10dp"/>
 
         <EditText
@@ -45,13 +37,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/et_register_username"
-            android:layout_marginTop="40dp"
-            android:textSize="16sp"
+            android:layout_marginTop="20dp"
+            android:textSize="20sp"
             android:textColor="#000000"
             android:inputType="textPassword"
             android:autofillHints="register_password"
             android:hint="@string/input_password"
-            android:background="#E1DCDC"
             android:padding="10dp"/>
 
         <TextView
@@ -67,13 +58,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_5"
-            android:layout_marginTop="10dp"
-            android:textSize="16sp"
+            android:layout_marginTop="0dp"
+            android:textSize="20sp"
             android:textColor="#000000"
             android:inputType="textPassword"
             android:autofillHints="register_repeat_password"
             android:hint="@string/repeat_password"
-            android:background="#E1DCDC"
             android:padding="10dp"/>
 
         <TextView
@@ -95,10 +85,11 @@
 
         <com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner
             android:id="@+id/spinner_password_question"
-            style="@style/Material.SpinnerStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_14"/>
+            android:layout_below="@id/tv_14"
+            app:ms_in_dialog="true"
+            />
 
         <EditText
             android:id="@+id/et_register_answer"
@@ -106,21 +97,21 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/spinner_password_question"
             android:layout_marginTop="40dp"
-            android:textSize="16sp"
+            android:textSize="20sp"
             android:textColor="#000000"
             android:inputType="text"
             android:autofillHints="question_answer"
             android:hint="@string/input_answer"
-            android:background="#E1DCDC"
             android:padding="10dp"/>
 
         <com.xuexiang.xui.widget.alpha.XUIAlphaButton
             android:id="@+id/btn_register"
             style="@style/Button.Primary.wrap"
+            android:layout_height="40dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_below="@id/et_register_answer"
             android:layout_marginTop="60dp"
+            android:textSize="20sp"
             android:text="@string/register_2"/>
 
     </RelativeLayout>

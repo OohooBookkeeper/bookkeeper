@@ -6,8 +6,8 @@ import java.util.List;
 
 public class FirstCategory implements IPickerViewItem {
 
-    private String name;
-    private List<String> category;
+    public String name;
+    public List<String> category;
 
     public String getName(){return name;}
 

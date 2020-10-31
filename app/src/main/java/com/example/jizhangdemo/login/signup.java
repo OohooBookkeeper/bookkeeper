@@ -3,6 +3,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.example.jizhangdemo.AccountHelper;
+import com.example.jizhangdemo.Initialization;
 
 import javax.crypto.Cipher;
 import javax.crypto.*;
@@ -45,7 +46,10 @@ public class signup extends Activity {
             byte[] encryptResult_password = encrypt(password, Key);
             String encryptResultStr_password = parseByte2HexStr(encryptResult_password);//将密码明文转为密文
             int defaultlogin = AccountHelper.PASSWD;
-            accountHelper.signup(username, encryptResultStr_password, problem_num, ans, patternEnabled , pattern, defaultlogin);//将注册信息存入数据库
+            byte[] encryptResult_answer = encrypt(ans, Key);
+            String encryptResultStr_answer = parseByte2HexStr(encryptResult_answer);
+            accountHelper.signup(username, encryptResultStr_password, problem_num, encryptResultStr_answer, patternEnabled , pattern, defaultlogin);//将注册信息存入数据库
+            Initialization.Initialization(context,username);
         }
         return error_code;
     }
@@ -82,6 +86,9 @@ public class signup extends Activity {
             if(!(Character.isDigit(username.charAt(i)) || Character.isLetter(username.charAt(i)))){  //用char包装类中的方法来判断用户名中是否只含有字母和数字
                 return false;
             }
+        }
+        if(username.equals("account")){
+            return false;
         }
         if(first_is_letter && length_less_sixteen  ) {
             return true;

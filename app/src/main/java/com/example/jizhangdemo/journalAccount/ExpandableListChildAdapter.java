@@ -1,7 +1,11 @@
 package com.example.jizhangdemo.journalAccount;
 
+import android.content.Context;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
@@ -19,10 +23,12 @@ import java.util.Collection;
 public class ExpandableListChildAdapter extends BaseRecyclerAdapter<LineElementChild> {
     private RecyclerView mRecyclerView;
     private Collection<LineElementChild> mDate;
+    private Context mContext;
 
-    public ExpandableListChildAdapter(RecyclerView recyclerView, Collection<LineElementChild> data) {
+    public ExpandableListChildAdapter(RecyclerView recyclerView, Collection<LineElementChild> data, Context context) {
         super(data);
         mDate = data;
+        mContext = context;
         mRecyclerView = recyclerView;
     }
 
@@ -60,6 +66,24 @@ public class ExpandableListChildAdapter extends BaseRecyclerAdapter<LineElementC
         expandableLayout.setExpanded(isSelected, false);
 
         holder.select(R.id.fl_title, isSelected);
+        holder.text(R.id.tv_title,item.getTitle());
+        if (!item.getSum().equals("")){
+            holder.text(R.id.tv_sum,"结余");
+            holder.text(R.id.tv_num_sum,item.getSum());
+        }
+        if (!item.getIn().equals("")){
+            holder.text(R.id.tv_in,item.getIn());
+        }
+        if (!item.getOut().equals("")){
+            holder.text(R.id.tv_out,item.getOut());
+        }
+        LinearLayout ll = (LinearLayout) holder.findView(R.id.ll);
+        for(View b:item.getBill()){
+            if(b.getParent()!=null){
+                ((ViewGroup) b.getParent()).removeView(b);
+            }
+            ll.addView(b);
+        }
         holder.click(R.id.fl_title, new View.OnClickListener() {
             @SingleClick
             @Override

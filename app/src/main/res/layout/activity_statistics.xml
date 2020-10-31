@@ -5,11 +5,70 @@
     android:layout_height="match_parent"
     tools:context=".fragment.StatisticsActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="统计"
-        android:textSize="25dp"
-        android:layout_gravity="center"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:id="@+id/time_select"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp">
+            <Button
+                android:id="@+id/btn_chart_DateStart"
+                android:background="@android:color/transparent"
+                android:textSize="15sp"
+                android:text="2020年12月12日"
+                android:layout_width="120dp"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:src="@drawable/ic_arrow_right"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@id/btn_DateStart"/>
+
+            <Button
+                android:id="@+id/btn_chart_DateEnd"
+                android:textSize="15sp"
+                android:background="@android:color/transparent"
+                android:text="2020年12月12日"
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@id/btn_DateStart"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/select_how_to_show"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/time_select"
+            android:orientation="horizontal">
+
+            <com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner
+                android:id="@+id/spinner_select_in_or_out"
+                style="@style/Material.SpinnerStyle"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+
+            <com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner
+                android:id="@+id/spinner_select_how_to_show"
+                style="@style/Material.SpinnerStyle"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/chart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/select_how_to_show"/>
+
+    </RelativeLayout>
 
 </FrameLayout>

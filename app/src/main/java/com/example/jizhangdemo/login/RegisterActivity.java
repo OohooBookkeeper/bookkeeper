@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -32,7 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        Button mBtnBack2 = findViewById(R.id.btn_back2);
+        //Button mBtnBack2 = findViewById(R.id.btn_back2);
         Button mBtnRegister = findViewById(R.id.btn_register);
         et_register_username = findViewById(R.id.et_register_username);
         et_register_password = findViewById(R.id.et_register_password);
@@ -40,6 +41,7 @@ public class RegisterActivity extends AppCompatActivity {
         et_register_answer = findViewById(R.id.et_register_answer);
         spinner_password_question = findViewById(R.id.spinner_password_question);
 
+        /*
         mBtnBack2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,6 +50,7 @@ public class RegisterActivity extends AppCompatActivity {
                 RegisterActivity.this.finish();
             }
         });
+         */
 
         //spinner_password_question.setItems(ResUtils.getStringArray(R.array.password_question));
         spinner_password_question.setItems(date);
@@ -112,6 +115,7 @@ public class RegisterActivity extends AppCompatActivity {
                             .positiveText("确定")
                             .show();
                 } else{
+                    Toast.makeText(RegisterActivity.this,"注册成功",Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(RegisterActivity.this, LoginMainActivity.class);
                     RegisterActivity.this.finish();
                     startActivity(intent);

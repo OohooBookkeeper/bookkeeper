@@ -12,7 +12,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:padding="15dp">
+            android:padding="5dp">
 
             <LinearLayout
                 android:id="@+id/time_select"
@@ -133,22 +133,23 @@
                 <com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner
                     android:id="@+id/spinner_select_time"
                     style="@style/Material.SpinnerStyle"
-                    android:layout_width="120dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content" />
 
                 <com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner
                     android:id="@+id/spinner_select_category"
                     style="@style/Material.SpinnerStyle"
-                    android:layout_width="120dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content" />
 
-                <Button
-                    android:id="@+id/btn_select_account"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:text="账户"
-                    android:textColor="#000000"
-                    android:gravity="center"/>
+                <com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner
+                    android:id="@+id/spinner_select_account"
+                    style="@style/Material.SpinnerStyle"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 

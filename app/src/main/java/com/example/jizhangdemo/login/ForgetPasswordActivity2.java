@@ -27,17 +27,9 @@ public class ForgetPasswordActivity2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password2);
-        Button mBtnBack4 = findViewById(R.id.btn_back4);
         Button mBtnFindPasswordConfirm = findViewById(R.id.btn_find_password_confirm);
         et_find_password_input_answer = findViewById(R.id.et_find_password_input_answer);
         spinner_find_password_question = findViewById(R.id.spinner_find_password_question);
-
-        mBtnBack4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ForgetPasswordActivity2.this.finish();
-            }
-        });
 
         @SuppressLint("ResourceType") final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_dropdown_item,date);

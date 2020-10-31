@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:text="请选择分类"
             android:layout_marginTop="40dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:textSize="20sp"/>
 
         <com.xuexiang.xui.widget.alpha.XUIAlphaButton
@@ -33,11 +33,11 @@
             android:layout_width="wrap_content"
             android:layout_marginTop="40dp"
             android:text="分类"
-            android:layout_toRightOf="@id/add_out_tv_classification"
-            android:layout_marginLeft="100dp"/>
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"/>
     </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -55,8 +55,9 @@
             style="@style/Material.SpinnerStyle"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"/>
-    </LinearLayout>
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"/>
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -77,8 +78,8 @@
             android:layout_width="wrap_content"
             android:layout_marginTop="40dp"
             android:text="时间"
-            android:layout_toRightOf="@id/add_out_tv_time"
-            android:layout_marginLeft="100dp"/>
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"/>
     </RelativeLayout>
 
     <EditText
@@ -87,18 +88,19 @@
         android:layout_height="wrap_content"
         android:inputType="text"
         android:textColor="#000000"
-        android:textSize="16sp"
+        android:textSize="20sp"
         android:layout_marginTop="40dp"
         android:hint="请填写备注"
         android:padding="10dp"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="40dp">
 
         <TextView
+            android:id="@+id/out_lbl_member"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -108,9 +110,10 @@
         <com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner
             android:id="@+id/add_out_spinner_member"
             style="@style/Material.SpinnerStyle"
+            android:layout_toEndOf="@id/out_lbl_member"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"/>
+            android:layout_marginLeft="20dp"/>
 
         <com.xuexiang.xui.widget.alpha.XUIAlphaButton
             android:id="@+id/add_out_btn_member_enable"
@@ -118,9 +121,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="不选成员"
-            android:layout_marginLeft="30dp"/>
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <com.xuexiang.xui.widget.alpha.XUIAlphaButton
         android:id="@+id/add_out_btn_save"

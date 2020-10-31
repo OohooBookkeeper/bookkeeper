@@ -6,7 +6,7 @@
     <string name="graph_login">图形密码登录</string>
     <string name="password_login">密码登录</string>
     <string name="register">注册账号</string>
-    <string name="back">退回</string>
+    <string name="back">&lt; 退回</string>
     <string name="password_login_interface">账号密码登录</string>
     <string name="input_password">请输入密码</string>
     <string name="login">登录</string>
@@ -30,4 +30,20 @@
     <string name="reset_password">重新设置密码</string>
     <string name="hint6">8到20个字符，不可以是纯数字</string>
     <string name="finish">完成</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

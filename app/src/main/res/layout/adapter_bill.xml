@@ -2,70 +2,98 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:padding="5dp">
-    
-    <TextView
-        android:id="@+id/tv_day"
-        android:layout_width="30dp"
-        android:layout_height="25dp"
-        android:text="18日"
-        android:textSize="10sp"
-        android:gravity="center"/>
-
-    <TextView
-        android:id="@+id/tv_day_of_week"
-        android:layout_width="30dp"
-        android:layout_height="25dp"
-        android:layout_below="@id/tv_day"
-        android:text="周一"
-        android:gravity="center"
-        android:textSize="10sp"/>
-    
-    <TextView
-        android:id="@+id/tv_second_category"
-        android:layout_width="60dp"
-        android:layout_height="25dp"
-        android:layout_toRightOf="@id/tv_day"
-        android:layout_marginLeft="30dp"
-        android:text="兼职工资"
-        android:gravity="center"/>
-
-    <TextView
-        android:id="@+id/tv_time"
-        android:layout_width="30dp"
-        android:layout_height="25dp"
-        android:layout_toRightOf="@id/tv_day_of_week"
-        android:layout_below="@id/tv_second_category"
-        android:layout_marginLeft="30dp"
-        android:text="22:18"
-        android:textSize="10sp"
-        android:gravity="center"/>
-
-    <TextView
-        android:id="@+id/tv_account"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_toRightOf="@id/tv_time"
-        android:layout_below="@id/tv_second_category"
-        android:text="微信"
-        android:textSize="10sp"
-        android:gravity="center"/>
-
-    <TextView
-        android:id="@+id/tv_remark"
-        android:layout_width="150dp"
-        android:layout_height="match_parent"
-        android:layout_toRightOf="@id/tv_second_category"
-        android:layout_marginLeft="30dp"
-        android:text="备注"
-        android:gravity="center"/>
-
-    <TextView
-        android:id="@+id/tv_money"
-        android:layout_width="60dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#ffff"
+    android:paddingHorizontal="10dp"
+    >
+    <LinearLayout
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_toRightOf="@id/tv_remark"
-        android:text="100.00"
-        android:gravity="center"/>
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        >
+        <TextView
+            android:id="@+id/tv_day"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="18日"
+            android:textSize="11sp"
+            android:gravity="center_vertical"/>
+
+        <TextView
+            android:id="@+id/tv_day_of_week"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="周一"
+            android:gravity="center_vertical"
+            android:textSize="11sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/information"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_toEndOf="@id/tv_date"
+        android:layout_marginStart="20dp"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        >
+        <TextView
+            android:id="@+id/tv_second_category"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="兼职工资"
+            android:gravity="center_vertical"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:text="22:18"
+                android:textSize="12sp"
+                android:gravity="center_vertical"/>
+            <TextView
+                android:id="@+id/tv_account"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_marginStart="5dp"
+                android:text="微信"
+                android:textSize="12sp"
+                android:gravity="center_vertical"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:gravity="center_vertical">
+        <TextView
+            android:id="@+id/tv_money"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="15dp"
+            android:text="100.000000000"
+            android:textAlignment="textEnd"
+            android:gravity="end|center_vertical"
+            android:layout_centerVertical="true"/>
+
+        <ImageView
+            android:id="@+id/btn_edit"
+            android:layout_width="20dp"
+            android:layout_height="50dp"
+            android:src="@drawable/icon_edit"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"/>
+    </LinearLayout>
+
+
 
 </RelativeLayout>

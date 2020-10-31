@@ -8,12 +8,14 @@ public class LineElementChild {
     private String title;
     private String in;
     private String out;
+    private String sum;
     private List<View> bill;
 
-    public LineElementChild(String title,String in,String out,List<View> bill){
+    public LineElementChild(String title,String in,String out,String sum,List<View> bill){
         this.title = title;
         this.in = in;
         this.out = out;
+        this.sum =sum;
         this.bill = bill;
     }
 
@@ -28,6 +30,10 @@ public class LineElementChild {
     public String getOut(){return this.out;}
 
     public void setOut(String out){ this.out = out;}
+
+    public String getSum(){return this.sum;}
+
+    public void setSum(String sum){ this.sum = sum;}
 
     public List<View> getBill(){ return this.bill;}
 
