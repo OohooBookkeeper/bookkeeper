@@ -44,10 +44,8 @@ public class AddOutFragment extends Fragment {
     private List<List<String>> options2Items = new ArrayList<>();
     private boolean mHasLoaded = false;
     private TextView add_out_tv_classification,add_out_tv_time;
-    private String tx,systemTime,username,remark;
+    private String tx,systemTime,username,remark,category,subcategory,account,member;
     private TimePickerView mTimePickerDialog;
-    private String[] account = new String[]{"微信","支付宝","银行卡"};
-    private String[] member = new String[]{"无","父亲","母亲","儿子"};
     private int account_pos = 1,member_pos,firstCategory_pos,secondCategory_pos;
     private boolean mWidgetEnable = true;
     private Message message;
@@ -89,7 +87,13 @@ public class AddOutFragment extends Fragment {
         });
 
         add_out_spinner_account.setItems(message.Account_name);
-        add_out_spinner_account.setOnItemSelectedListener((spinner,position,id,item)->account_pos = position + 1);
+        add_out_spinner_account.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+                account_pos = position + 1;
+                account = message.Account_name.get(position);
+            }
+        });
 
         add_out_btn_picker_time.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,7 +120,13 @@ public class AddOutFragment extends Fragment {
             }
         });
         add_out_spinner_member.setItems(message.Member_name);
-        add_out_spinner_member.setOnItemSelectedListener((spinner,position,id,item)->member_pos = position);
+        add_out_spinner_member.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+                member_pos = position + 1;
+                member = message.Member_name.get(position);
+            }
+        });
 
         add_out_btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,7 +139,7 @@ public class AddOutFragment extends Fragment {
                     remark = add_out_et_remark.getText().toString();
                     Log.d("test-account_pos", String.valueOf(account_pos));
                     if (New_bookkeeping.New_bookkeeping_nontransfer(getActivity(),username,money,firstCategory_pos,secondCategory_pos,
-                            account_pos,time,member_pos,-1,-1,remark,0) == 0){
+                            account_pos,time,member_pos,-1,-1,remark,0,category,subcategory,account,member) == 0){
                         Toast.makeText(getActivity(),"保存成功",Toast.LENGTH_SHORT).show();
                         getActivity().finish();
                     }else {
@@ -166,6 +176,8 @@ public class AddOutFragment extends Fragment {
                 tx = options1Items.get(options1).getPickerViewText() +"-" +
                         options2Items.get(options1).get(options2);
             }
+            category = options1Items.get(options1).getPickerViewText();
+            subcategory = options2Items.get(options1).get(options2);
             firstCategory_pos = options1 + 1;
             secondCategory_pos = options2 + 1;
             add_out_tv_classification.setText(tx);

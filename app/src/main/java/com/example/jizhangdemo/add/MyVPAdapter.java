@@ -1,6 +1,8 @@
 package com.example.jizhangdemo.add;
 
+import android.content.Context;
 import android.provider.Settings;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,42 +19,37 @@ import java.util.List;
 
 public class MyVPAdapter extends FragmentStatePagerAdapter {
 
-    public MyVPAdapter(FragmentManager fm) {
+    private Context c;
+    private List<String> title;
+    private List<Fragment> frag;
+
+    public MyVPAdapter(Context c, FragmentManager fm, List<String> title, List<Fragment> frag) {
         super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        this.c = c;
+        this.title = title;
+        this.frag = frag;
     }
 
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        switch(position) {
-            case 0:
-                return new HomePageActivity();
-            case 1:
-                return new JournalAccountActivity();
-            case 2:
-                return new StatisticsActivity();
-            case 3:
-                return new SettingActivity();
-            default:
-                throw new IllegalStateException("Illegal state!");
+        try {
+            return frag.get(position);
+        } catch (Exception e) {
+            Toast.makeText(c, "Error on tab loading: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+        return null;
     }
 
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        switch(position) {
-            case 0:
-                return "收入";
-            case 1:
-                return "支出";
-            case 2:
-                return "转账";
-            case 3:
-                return "模板";
-            default:
-                throw new IllegalStateException("Illegal state!");
+        try {
+            return title.get(position);
+        } catch (Exception e) {
+            Toast.makeText(c, "Error on tab loading: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+        return null;
     }
 
     @Override

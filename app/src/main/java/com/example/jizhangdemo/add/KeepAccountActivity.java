@@ -106,18 +106,7 @@ public class KeepAccountActivity extends AppCompatActivity {
     }
 
     private void putDataInBundle(Transaction t){
-        if (t.outaccount == Transaction.NONTRANSFER){
-            bundle.putInt("category",t.category);
-            bundle.putInt("subcategory",t.subcategory);
-        }else {
-            bundle.putInt("outaccount",t.outaccount);
-        }
-        bundle.putInt("time",t.time);
-        bundle.putInt("amount",t.amount);
-        bundle.putInt("account",t.account);
-        bundle.putString("remark",t.note);
-        bundle.putInt("member",t.member);
-        bundle.putBoolean("isEdit",true);
+        bundle.putInt("id",t.id);
     }
 
     private class OnClick implements View.OnClickListener {

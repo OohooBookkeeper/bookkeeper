@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
+import com.example.jizhangdemo.journalAccount.Transaction;
 
 public class BookHelper extends SQLiteOpenHelper {
     private static final String CREATE_TRANSACTION = "create table [Transaction](id integer primary key autoincrement, " +
@@ -20,8 +21,10 @@ public class BookHelper extends SQLiteOpenHelper {
     private static final String CREATE_MEMBER = "create table Member(member integer primary key autoincrement, name text)";
     private static final String CREATE_TRADER = "create table Trader(trader integer primary key autoincrement, name text)";
     private static final String CREATE_PROJECT = "create table Project(project integer primary key autoincrement, name text)";
+    private static final String CREATE_TEMP = "create table Temp(id integer primary key autoincrement, category integer, " +
+            "subcategory integer, account integer, outaccount integer, member integer, trader integer, project integer, note text)";
     private static final String[] CREATE = {CREATE_TRANSACTION, CREATE_CATEGORY, CREATE_SUBCATEGORY,
-            CREATE_ACCOUNT, CREATE_MEMBER, CREATE_TRADER, CREATE_PROJECT};
+            CREATE_ACCOUNT, CREATE_MEMBER, CREATE_TRADER, CREATE_PROJECT, CREATE_TEMP};
     private static final String LINK_CATEGORY = "select S.category, C.name as cname, S.subcategory, S.name as sname" +
             " from Subcategory as S left join Category as C on S.category = C.category";
     private Context context;
@@ -36,6 +39,7 @@ public class BookHelper extends SQLiteOpenHelper {
     public static final int TRADER = 5;
     public static final int PROJECT = 6;
     public static final int TIME = 7;
+    public static final int TEMPLATE = 8;
 
     public static final int EXPENSE = 0;
     public static final int INCOME = 1;
@@ -129,51 +133,6 @@ public class BookHelper extends SQLiteOpenHelper {
         if (sOrderBy == null)
             return db.rawQuery(SQL, null);
         return db.rawQuery(SQL + "order by ? " + sDesc, new String[]{sOrderBy});
-    }
-
-    // 显示指定时间段所有收入/支出或所有转账，startTime为开始时间，endTime为结束时间，orderBy为排序依据，desc规定结果是否降序排序
-    @SuppressLint("Recycle")
-    public Cursor displayAllTransactions(int startTime, int endTime, int orderBy, boolean desc) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String sDesc = desc ? "desc" : "";
-        String sOrderBy;
-        switch (orderBy) {
-            case CATEGORY:
-                sOrderBy = "category";
-                break;
-            case SUBCATEGORY:
-                sOrderBy = "subcategory";
-                break;
-            case ACCOUNT:
-                sOrderBy = "account";
-                break;
-            case TIME:
-                sOrderBy = "time";
-                break;
-            case MEMBER:
-                sOrderBy = "member";
-                break;
-            case TRADER:
-                sOrderBy = "trader";
-                break;
-            case PROJECT:
-                sOrderBy = "project";
-                break;
-            default:
-                sOrderBy = null;
-        }
-        final String SELECT = " T.*, C.name as cname, C.type as [type], S.name as sname, A1.name as aname, " +
-                "A2.name as oaname, M.name as mname, R.name as rname, P.name as pname ";
-        final String FROM = " [Transaction] as T left join Category as C on T.category = C.category " +
-                "left join Subcategory as S on T.category = S.category and T.subcategory = S.subcategory " +
-                "left join Account as A1 on T.account = A1.account left join Account as A2 on " +
-                "T.outaccount = A2.account left join Member as M on T.member = M.member left join " +
-                "Trader as R on T.trader = R.trader left join Project as P on T.project = P.project ";
-        final String WHERE = " T.time between ? and ?";
-        final String SQL = "select" + SELECT + "from" + FROM + "where" + WHERE;
-        if (sOrderBy == null)
-            return db.rawQuery(SQL, new String[]{String.valueOf(startTime), String.valueOf(endTime)});
-        return db.rawQuery(SQL + "order by ? " + sDesc, new String[]{String.valueOf(startTime), String.valueOf(endTime), sOrderBy});
     }
 
     // 删除一笔账目，通过指定账目的唯一标识号ID实现
@@ -318,6 +277,59 @@ public class BookHelper extends SQLiteOpenHelper {
         db.delete("Project", "project = ?", new String[]{String.valueOf(project)});
     }
 
+    // 增加一个模板
+    public void addTemplate(Transaction t) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues entry = new ContentValues();
+        entry.put("category", t.category);
+        entry.put("subcategory", t.subcategory);
+        entry.put("account", t.account);
+        entry.put("outaccount", t.outaccount);
+        entry.put("category", t.category);
+        entry.put("member", t.member);
+        entry.put("trader", t.trader);
+        entry.put("project", t.project);
+        entry.put("note", t.note);
+        db.insert("Temp", null, entry);
+    }
+
+    // 修改一个模板，通过指定模板的唯一标识号ID实现
+    public void updateTemplate(int id, Transaction t) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues entry = new ContentValues();
+        entry.put("category", t.category);
+        entry.put("subcategory", t.subcategory);
+        entry.put("account", t.account);
+        entry.put("outaccount", t.outaccount);
+        entry.put("category", t.category);
+        entry.put("member", t.member);
+        entry.put("trader", t.trader);
+        entry.put("project", t.project);
+        entry.put("note", t.note);
+        db.update("Temp", entry, "id = ?", new String[] {String.valueOf(id)});
+    }
+
+    // 删除一个模板
+    public void deleteTemplate(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("Temp", "id = ?", new String[] {String.valueOf(id)});
+    }
+
+    // 显示所有模板
+    @SuppressLint("Recycle")
+    public Cursor displayAllTemplates() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        final String SELECT = " T.*, C.name as cname, C.type as [type], S.name as sname, A1.name as aname, " +
+                "A2.name as oaname, M.name as mname, R.name as rname, P.name as pname ";
+        final String FROM = " Template as T left join Category as C on T.category = C.category " +
+                "left join Subcategory as S on T.category = S.category and T.subcategory = S.subcategory " +
+                "left join Account as A1 on T.account = A1.account left join Account as A2 on " +
+                "T.outaccount = A2.account left join Member as M on T.member = M.member left join " +
+                "Trader as R on T.trader = R.trader left join Project as P on T.project = P.project ";
+        final String SQL = "select" + SELECT + "from" + FROM;
+        return db.rawQuery(SQL, null);
+    }
+
     // 检查某条记录是否存在
     public boolean exists(int table, String field, String value) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -329,7 +341,7 @@ public class BookHelper extends SQLiteOpenHelper {
         String s;
         switch (table) {
             case TRANSACTION:
-                s = "Transaction";
+                s = "[Transaction]";
                 break;
             case CATEGORY:
                 s = "Category";
@@ -348,6 +360,9 @@ public class BookHelper extends SQLiteOpenHelper {
                 break;
             case PROJECT:
                 s = "Project";
+                break;
+            case TEMPLATE:
+                s = "Temp";
                 break;
             default:
                 return null;

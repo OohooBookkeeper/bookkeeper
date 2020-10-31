@@ -34,10 +34,8 @@ public class AddTransferFragment extends Fragment {
     private Button add_transfer_btn_picker_time,add_transfer_btn_save,add_transfer_btn_member_enable;
     private MaterialSpinner add_transfer_spinner_account_out,add_transfer_spinner_account_in,add_transfer_spinner_member;
     private TextView add_transfer_tv_time;
-    private String systemTime,username,remark;
+    private String systemTime,username,remark,account,outaccount,member;
     private TimePickerView mTimePickerDialog;
-    private String[] account = new String[]{"微信","支付宝","银行卡"};
-    private String[] member = new String[]{"无","父亲","母亲","儿子"};
     private int account_out_pos = 1,account_in_pos = 1,member_pos;
     private boolean mWidgetEnable = true;
     private Message message;
@@ -69,10 +67,22 @@ public class AddTransferFragment extends Fragment {
         add_transfer_btn_member_enable = view.findViewById(R.id.add_transfer_btn_member_enable);
 
         add_transfer_spinner_account_out.setItems(message.Account_name);
-        add_transfer_spinner_account_out.setOnItemSelectedListener((spinner,position,id,item)->account_out_pos = position + 1);
+        add_transfer_spinner_account_out.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+                account_out_pos = position + 1;
+                account = message.Account_name.get(position);
+            }
+        });
 
         add_transfer_spinner_account_in.setItems(message.Account_name);
-        add_transfer_spinner_account_in.setOnItemSelectedListener((spinner,position,id,item)->account_in_pos = position + 1);
+        add_transfer_spinner_account_in.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+                account_in_pos = position + 1;
+                outaccount = message.Account_name.get(position);
+            }
+        });
 
         add_transfer_btn_picker_time.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,7 +109,13 @@ public class AddTransferFragment extends Fragment {
             }
         });
         add_transfer_spinner_member.setItems(message.Member_name);
-        add_transfer_spinner_member.setOnItemSelectedListener((spinner,position,id,item)->member_pos = position);
+        add_transfer_spinner_member.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+                member_pos = position;
+                member = message.Member_name.get(position);
+            }
+        });
 
         add_transfer_btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,7 +127,7 @@ public class AddTransferFragment extends Fragment {
                     money = money.setScale(2);
                     remark = add_transfer_et_remark.getText().toString();
                     if (New_bookkeeping.New_bookkeeping_transfer(getActivity(),username,money,
-                            account_out_pos,account_in_pos,member_pos,time,remark) == 0){
+                            account_out_pos,account_in_pos,member_pos,time,remark,account,member,outaccount) == 0){
                         Toast.makeText(getActivity(),"保存成功",Toast.LENGTH_SHORT).show();
                         getActivity().finish();
                     }else {

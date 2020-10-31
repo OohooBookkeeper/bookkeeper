@@ -24,8 +24,7 @@ import com.bumptech.glide.request.transition.NoTransition;
 import com.example.jizhangdemo.R;
 import com.example.jizhangdemo.UserManage;
 import com.example.jizhangdemo.add.BookHelper;
-import com.example.jizhangdemo.add.KeepAccountActivity;
-import com.example.jizhangdemo.journalAccount.Bill;
+import com.example.jizhangdemo.add.TabAddActivity;
 import com.example.jizhangdemo.journalAccount.Display;
 import com.example.jizhangdemo.journalAccount.ExpandableListAdapter;
 import com.example.jizhangdemo.journalAccount.ExpandableListChildAdapter;
@@ -473,7 +472,9 @@ public class JournalAccountActivity extends Fragment {
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
                     bundle.putInt("id",t.id);
-                    Intent intent = new Intent(getActivity(), KeepAccountActivity.class).putExtras(bundle);
+                    bundle.putInt("type",t.type);
+                    bundle.putInt("outaccount",t.outaccount);
+                    Intent intent = new Intent(getActivity(), TabAddActivity.class).putExtras(bundle);
                     getActivity().startActivity(intent);
                 }
             });

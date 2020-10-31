@@ -12,9 +12,9 @@ import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
+
 public class signup extends Activity {
     static AccountHelper accountHelper;
-
     public static int signup(Context context, String username, String password, String password_rp, int problem_num, String ans)
     {
         int error_code = -1;//定义错误码
@@ -35,20 +35,20 @@ public class signup extends Activity {
         else if(accountHelper.query(username).getCount()!=0) {  //判断用户输入的用户名是否已经存在
             error_code = 2;//用户名已经存在
         }
-//        else if(!ans.equals("")){  //判断用户是否输入密保问题答案
-//            error_code = 5;//用户没有输入密保问题答案
-//        }
+        else if(!ans.equals("")){  //判断用户是否输入密保问题答案
+            error_code = 5;//用户没有输入密保问题答案
+        }
         else {  //登录成功
             error_code = 0;
             int patternEnabled = 0;//设置图形密码未启用
             String pattern = "";//图形密码置空
             String Key = "0123456789ABCDEF";//设置固定密钥
-            byte[] encryptResult_password = encrypt(password, Key);
-            String encryptResultStr_password = parseByte2HexStr(encryptResult_password);//将密码明文转为密文
-            int defaultlogin = AccountHelper.PASSWD;
+            byte[] encryptResult = encrypt(password, Key);
+            String encryptResultStr = parseByte2HexStr(encryptResult);//将密码明文转为密文
             byte[] encryptResult_answer = encrypt(ans, Key);
             String encryptResultStr_answer = parseByte2HexStr(encryptResult_answer);
-            accountHelper.signup(username, encryptResultStr_password, problem_num, encryptResultStr_answer, patternEnabled , pattern, defaultlogin);//将注册信息存入数据库
+            int defaultlogin = AccountHelper.PASSWD;
+            accountHelper.signup(username, encryptResultStr, problem_num, encryptResultStr_answer, patternEnabled , pattern, defaultlogin);//将注册信息存入数据库
             Initialization.Initialization(context,username);
         }
         return error_code;
@@ -86,9 +86,6 @@ public class signup extends Activity {
             if(!(Character.isDigit(username.charAt(i)) || Character.isLetter(username.charAt(i)))){  //用char包装类中的方法来判断用户名中是否只含有字母和数字
                 return false;
             }
-        }
-        if(username.equals("account")){
-            return false;
         }
         if(first_is_letter && length_less_sixteen  ) {
             return true;
