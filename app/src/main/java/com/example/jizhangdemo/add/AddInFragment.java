@@ -19,7 +19,6 @@ import androidx.fragment.app.Fragment;
 import com.example.jizhangdemo.R;
 import com.example.jizhangdemo.journalAccount.Transaction;
 import com.example.jizhangdemo.setting.Bookkeeping_setting;
-import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 import com.xuexiang.xui.widget.picker.widget.OptionsPickerView;
 import com.xuexiang.xui.widget.picker.widget.TimePickerView;
 import com.xuexiang.xui.widget.picker.widget.builder.OptionsPickerBuilder;
@@ -35,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class AddInFragment extends Fragment {
 
@@ -49,11 +49,45 @@ public class AddInFragment extends Fragment {
     private String tx,systemTime,remark,username,category,subcategory,account,member;
     private TimePickerView mTimePickerDialog;
     private int account_pos,member_pos,firstCategory_pos,secondCategory_pos;
-    private boolean mWidgetEnable = true,isEdit;
+    private boolean mWidgetEnable = true,isEdit = false;
     private Message message;
     private long time;
     private BigDecimal money;
     private int id;
+
+    public void deleteTransaction() {
+        if (isEdit) {
+            BookHelper bkhp = new BookHelper(getActivity(), this.username + ".db");
+            bkhp.deleteTransaction(this.id);
+        }
+    }
+
+    public void save() {
+        if (TextUtils.isEmpty(add_in_et_money.getText().toString())){
+            Toast.makeText(getActivity(),"未输入金额",Toast.LENGTH_SHORT).show();
+        }else {
+            money = new BigDecimal(add_in_et_money.getText().toString());
+            money = money.setScale(2);
+            remark = add_in_et_remark.getText().toString();
+            if (!isEdit){
+                if (New_bookkeeping.New_bookkeeping_nontransfer(getActivity(),username,money,firstCategory_pos,secondCategory_pos,
+                        account_pos,time,member_pos,-1,-1,remark,1,category,subcategory,account,member) == 0){
+                    Toast.makeText(getActivity(),"保存成功",Toast.LENGTH_SHORT).show();
+                    getActivity().finish();
+                }else {
+                    Toast.makeText(getActivity(),"保存失败",Toast.LENGTH_SHORT).show();
+                }
+            }else {
+                if (Bookkeeping_setting.Change_bookkeeping_nontransfer(getActivity(),username,id,money,firstCategory_pos,secondCategory_pos,
+                        account_pos,time,member_pos,-1,-1,remark,1,category,subcategory,account,member) == 0){
+                    Toast.makeText(getActivity(),"保存成功",Toast.LENGTH_SHORT).show();
+                    getActivity().finish();
+                }else {
+                    Toast.makeText(getActivity(),"保存失败",Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
 
     @Nullable
     @Override
@@ -131,30 +165,7 @@ public class AddInFragment extends Fragment {
         add_in_btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (TextUtils.isEmpty(add_in_et_money.getText().toString())){
-                    Toast.makeText(getActivity(),"未输入金额",Toast.LENGTH_SHORT).show();
-                }else {
-                    money = new BigDecimal(add_in_et_money.getText().toString());
-                    money = money.setScale(2);
-                    remark = add_in_et_remark.getText().toString();
-                    if (!isEdit){
-                        if (New_bookkeeping.New_bookkeeping_nontransfer(getActivity(),username,money,firstCategory_pos,secondCategory_pos,
-                                account_pos,time,member_pos,-1,-1,remark,1,category,subcategory,account,member) == 0){
-                            Toast.makeText(getActivity(),"保存成功",Toast.LENGTH_SHORT).show();
-                            getActivity().finish();
-                        }else {
-                            Toast.makeText(getActivity(),"保存失败",Toast.LENGTH_SHORT).show();
-                        }
-                    }else {
-                        if (Bookkeeping_setting.Change_bookkeeping_nontransfer(getActivity(),username,id,money,firstCategory_pos,secondCategory_pos,
-                                account_pos,time,member_pos,-1,-1,remark,1,category,subcategory,account,member) == 0){
-                            Toast.makeText(getActivity(),"保存成功",Toast.LENGTH_SHORT).show();
-                            getActivity().finish();
-                        }else {
-                            Toast.makeText(getActivity(),"保存失败",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }
+                save();
             }
         });
     }
@@ -213,7 +224,7 @@ public class AddInFragment extends Fragment {
                 .setTextColorCenter(Color.BLACK)
                 .setContentTextSize(20)
                 .isDialog(true)
-                .setSelectOptions(firstCategory_pos, secondCategory_pos)
+                .setSelectOptions(firstCategory_pos - 1, secondCategory_pos - 1)
                 .build();
         try {
             pvOptions.setPicker(options1Items, options2Items);//二级选择器*/
@@ -262,32 +273,45 @@ public class AddInFragment extends Fragment {
             Transaction t = Bookkeeping_setting.Return_transaction(getActivity(),username,id);
             money = new BigDecimal(t.amount).movePointLeft(2);
             time = (long)t.time* 60000;
-            account_pos = t.account;
-            member_pos = t.member;
-            add_in_et_money.setText(money.toPlainString());
-            firstCategory_pos = options1Item.indexOf(t.cname);
-            Log.d("test_pos", String.valueOf(firstCategory_pos));
-            secondCategory_pos = options2Items.get(firstCategory_pos).indexOf(t.sname);
-            if (options2Items.get(firstCategory_pos).get(secondCategory_pos) == null){
-                add_in_tv_classification.setText(options1Items.get(firstCategory_pos ).getPickerViewText());
+            account = t.aname;
+            member = t.mname;
+            if (options1Item.indexOf(t.cname) != -1){
+                firstCategory_pos = options1Item.indexOf(t.cname);
+                if (options2Items.get(firstCategory_pos).indexOf(t.sname) != -1){
+                    secondCategory_pos = options2Items.get(firstCategory_pos).indexOf(t.sname);
+                    add_in_tv_classification.setText(options1Items.get(firstCategory_pos ).getPickerViewText() + "-"
+                            + options2Items.get(firstCategory_pos).get(secondCategory_pos));
+                    firstCategory_pos++;
+                    secondCategory_pos++;
+                }else {
+                    add_in_tv_classification.setText(options1Items.get(firstCategory_pos ).getPickerViewText());
+                }
             }else {
-                add_in_tv_classification.setText(options1Items.get(firstCategory_pos ).getPickerViewText() + "-"
-                        + options2Items.get(firstCategory_pos).get(secondCategory_pos));
+                add_in_tv_classification.setText("无分类");
             }
-            if (t.account > 0){
-                add_in_spinner_account.setSelectedIndex(t.account - 1);
+            add_in_et_money.setText(money.toPlainString());
+            if (message.Account_name.indexOf(account) != -1){
+                account_pos = message.Account_name.indexOf(account) + 1;
+            }else {
+                account_pos = 1;
             }
+            if (message.Member_name.indexOf(member) != -1){
+                member_pos = message.Member_name.indexOf(member) + 1;
+            }else {
+                member_pos = 1;
+            }
+            add_in_spinner_account.setSelectedIndex(account_pos - 1);
+            add_in_spinner_member.setSelectedIndex(member_pos - 1);
             add_in_tv_time.setText(DateUtils.date2String(new Date(time), DateUtils.yyyyMMddHHmm.get()));
             if (t.note != null){
                 add_in_et_remark.setText(t.note);
-            }
-            if (t.member > 0){
-                add_in_spinner_member.setSelectedIndex(t.member - 1);
             }
         }else {
             add_in_tv_time.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(System.currentTimeMillis())));
             time = DateUtils.date2Millis(new Date(System.currentTimeMillis()));
             account_pos = 1;
         }
+        firstCategory_pos = 1;
+        secondCategory_pos = 1;
     }
 }

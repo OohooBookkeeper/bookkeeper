@@ -35,8 +35,19 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                             .content("请输入用户名")
                             .positiveText("确定")
                             .show();
-                }else {
-                    Intent intent = new Intent(ForgetPasswordActivity.this,ForgetPasswordActivity2.class);
+                }
+                else if(Find_password.Username_is_ok(ForgetPasswordActivity.this,username) == 1){
+                    new MaterialDialog.Builder(ForgetPasswordActivity.this)
+                            .iconRes(R.drawable.icon_warning)
+                            .title("提示")
+                            .content("用户名不存在")
+                            .positiveText("确定")
+                            .show();
+                }
+                else {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("username",username);
+                    Intent intent = new Intent(ForgetPasswordActivity.this,ForgetPasswordActivity2.class).putExtras(bundle);
                     startActivity(intent);
                 }
             }

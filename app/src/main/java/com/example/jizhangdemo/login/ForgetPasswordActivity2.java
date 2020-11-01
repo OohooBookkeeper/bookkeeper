@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,33 +20,22 @@ import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 public class ForgetPasswordActivity2 extends AppCompatActivity {
 
     private EditText et_find_password_input_answer;
-    private String answer,pos;
-    private Spinner spinner_find_password_question;
+    private String username,answer;
+    private TextView tv_question;
     private String[] date = new String[]{"你的父亲的名字","你的母亲的名字","你的生日"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password2);
+        username = getIntent().getExtras().getString("username");
         Button mBtnFindPasswordConfirm = findViewById(R.id.btn_find_password_confirm);
         et_find_password_input_answer = findViewById(R.id.et_find_password_input_answer);
-        spinner_find_password_question = findViewById(R.id.spinner_find_password_question);
+        tv_question = findViewById(R.id.tv_question);
 
-        @SuppressLint("ResourceType") final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_dropdown_item,date);
-        spinner_find_password_question.setAdapter(adapter);
-        spinner_find_password_question.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                pos = adapter.getItem(position);
-            }
+        int problem_num = Find_password.Return_problem_num(ForgetPasswordActivity2.this,username);
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
+        tv_question.setText(date[problem_num]);
         mBtnFindPasswordConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,9 +47,21 @@ public class ForgetPasswordActivity2 extends AppCompatActivity {
                             .content("请输入密保问题答案")
                             .positiveText("确定")
                             .show();
-                }else {
-                    Intent intent = new Intent(ForgetPasswordActivity2.this,ResetPasswordActivity.class);
+                }
+                else if(Find_password.Answer_is_correct(ForgetPasswordActivity2.this,username,answer) == 1){
+                    new MaterialDialog.Builder(ForgetPasswordActivity2.this)
+                            .iconRes(R.drawable.icon_warning)
+                            .title("提示")
+                            .content("密保问题答案错误")
+                            .positiveText("确定")
+                            .show();
+                }
+                else {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("username",username);
+                    Intent intent = new Intent(ForgetPasswordActivity2.this,ResetPasswordActivity.class).putExtras(bundle);
                     startActivity(intent);
+                    finish();
                 }
             }
         });

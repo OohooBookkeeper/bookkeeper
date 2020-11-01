@@ -17,8 +17,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.jizhangdemo.R;
-import com.google.gson.reflect.TypeToken;
-import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
+import com.example.jizhangdemo.journalAccount.Transaction;
+import com.example.jizhangdemo.setting.Bookkeeping_setting;
 import com.xuexiang.xui.widget.picker.widget.OptionsPickerView;
 import com.xuexiang.xui.widget.picker.widget.TimePickerView;
 import com.xuexiang.xui.widget.picker.widget.builder.OptionsPickerBuilder;
@@ -26,31 +26,67 @@ import com.xuexiang.xui.widget.picker.widget.builder.TimePickerBuilder;
 import com.xuexiang.xui.widget.picker.widget.listener.OnTimeSelectListener;
 import com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner;
 import com.xuexiang.xutil.data.DateUtils;
-import com.xuexiang.xutil.net.JsonUtil;
-import com.xuexiang.xutil.resource.ResourceUtils;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class AddOutFragment extends Fragment {
     private EditText add_out_et_money,add_out_et_remark;
     private Button add_out_btn_picker_classification,add_out_btn_picker_time,add_out_btn_save,add_out_btn_member_enable;
     private MaterialSpinner add_out_spinner_account,add_out_spinner_member;
     private List<FirstCategory> options1Items = new ArrayList<>();
+    private List<String> options1Item = new ArrayList<>();
     private List<List<String>> options2Items = new ArrayList<>();
     private boolean mHasLoaded = false;
     private TextView add_out_tv_classification,add_out_tv_time;
     private String tx,systemTime,username,remark,category,subcategory,account,member;
     private TimePickerView mTimePickerDialog;
     private int account_pos = 1,member_pos,firstCategory_pos,secondCategory_pos;
-    private boolean mWidgetEnable = true;
+    private boolean mWidgetEnable = true,isEdit;
     private Message message;
     private BigDecimal money;
     private long time;
+    private int id;
+
+    public void deleteTransaction() {
+        if (isEdit) {
+            BookHelper bkhp = new BookHelper(getActivity(), this.username + ".db");
+            bkhp.deleteTransaction(this.id);
+        }
+    }
+
+    public void save() {
+        if (TextUtils.isEmpty(add_out_et_money.getText().toString())){
+            Toast.makeText(getActivity(),"未输入金额",Toast.LENGTH_SHORT).show();
+        }else {
+            money = new BigDecimal(add_out_et_money.getText().toString());
+            money = money.setScale(2);
+            remark = add_out_et_remark.getText().toString();
+            if (!isEdit){
+                if (New_bookkeeping.New_bookkeeping_nontransfer(getActivity(),username,money,firstCategory_pos,secondCategory_pos,
+                        account_pos,time,member_pos,-1,-1,remark,0,category,subcategory,account,member) == 0){
+                    Toast.makeText(getActivity(),"保存成功",Toast.LENGTH_SHORT).show();
+                    getActivity().finish();
+                }else {
+                    Toast.makeText(getActivity(),"保存失败",Toast.LENGTH_SHORT).show();
+                }
+            }else {
+                if (Bookkeeping_setting.Change_bookkeeping_nontransfer(getActivity(),username,id,money,firstCategory_pos,secondCategory_pos,
+                        account_pos,time,member_pos,-1,-1,remark,0,category,subcategory,account,member) == 0){
+                    Toast.makeText(getActivity(),"保存成功",Toast.LENGTH_SHORT).show();
+                    getActivity().finish();
+                }else {
+                    Toast.makeText(getActivity(),"保存失败",Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
 
     @Nullable
     @Override
@@ -59,6 +95,10 @@ public class AddOutFragment extends Fragment {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             username = bundle.getString("username");
+            isEdit = bundle.getBoolean("isEdit");
+        }
+        if (isEdit){
+            id = bundle.getInt("id");
         }
         return view;
     }
@@ -66,18 +106,8 @@ public class AddOutFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         message = Return_message.Return(getActivity(),0,username);
-        add_out_et_money = view.findViewById(R.id.add_out_et_money);
-        add_out_btn_picker_classification = view.findViewById(R.id.add_out_btn_picker_classification);
-        add_out_spinner_account = view.findViewById(R.id.add_out_spinner_account);
-        add_out_btn_picker_time = view.findViewById(R.id.add_out_btn_picker_time);
-        add_out_et_remark = view.findViewById(R.id.add_out_et_remark);
-        add_out_spinner_member = view.findViewById(R.id.add_out_spinner_member);
-        add_out_tv_classification = view.findViewById(R.id.add_out_tv_classification);
-        add_out_tv_time = view.findViewById(R.id.add_out_tv_time);
-        add_out_btn_save = view.findViewById(R.id.add_out_btn_save);
-        add_out_btn_member_enable = view.findViewById(R.id.add_out_btn_member_enable);
 
-        InitList();
+        init(view);
 
         add_out_btn_picker_classification.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,23 +161,22 @@ public class AddOutFragment extends Fragment {
         add_out_btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (TextUtils.isEmpty(add_out_et_money.getText().toString())){
-                    Toast.makeText(getActivity(),"未输入金额",Toast.LENGTH_SHORT).show();
-                }else {
-                    money = new BigDecimal(add_out_et_money.getText().toString());
-                    money = money.setScale(2);
-                    remark = add_out_et_remark.getText().toString();
-                    Log.d("test-account_pos", String.valueOf(account_pos));
-                    if (New_bookkeeping.New_bookkeeping_nontransfer(getActivity(),username,money,firstCategory_pos,secondCategory_pos,
-                            account_pos,time,member_pos,-1,-1,remark,0,category,subcategory,account,member) == 0){
-                        Toast.makeText(getActivity(),"保存成功",Toast.LENGTH_SHORT).show();
-                        getActivity().finish();
-                    }else {
-                        Toast.makeText(getActivity(),"保存失败",Toast.LENGTH_SHORT).show();
-                    }
-                }
+                save();
             }
         });
+    }
+
+    private void getComponents(View view){
+        add_out_et_money = view.findViewById(R.id.add_out_et_money);
+        add_out_btn_picker_classification = view.findViewById(R.id.add_out_btn_picker_classification);
+        add_out_spinner_account = view.findViewById(R.id.add_out_spinner_account);
+        add_out_btn_picker_time = view.findViewById(R.id.add_out_btn_picker_time);
+        add_out_et_remark = view.findViewById(R.id.add_out_et_remark);
+        add_out_spinner_member = view.findViewById(R.id.add_out_spinner_member);
+        add_out_tv_classification = view.findViewById(R.id.add_out_tv_classification);
+        add_out_tv_time = view.findViewById(R.id.add_out_tv_time);
+        add_out_btn_save = view.findViewById(R.id.add_out_btn_save);
+        add_out_btn_member_enable = view.findViewById(R.id.add_out_btn_member_enable);
     }
 
     /**
@@ -160,6 +189,7 @@ public class AddOutFragment extends Fragment {
     private void LoadDate(List<FirstCategory> firstCategories){
         options1Items = firstCategories;
         for (FirstCategory firstCategory : firstCategories){
+            options1Item.add(firstCategory.getName());
             List<String> secondCategory = new ArrayList<>();
             secondCategory.addAll(firstCategory.getCategory());
             options2Items.add(secondCategory);
@@ -168,7 +198,6 @@ public class AddOutFragment extends Fragment {
     }
 
     private void showPickerView(){
-        int[] defaultSelectOptions = getDefaultCategory();
         OptionsPickerView pvOptions = new OptionsPickerBuilder(getContext(),(v, options1, options2, options3)->{
             if (options2Items.get(options1).get(options2) == null){
                 tx = options1Items.get(options1).getPickerViewText();
@@ -191,31 +220,10 @@ public class AddOutFragment extends Fragment {
                 .setTextColorCenter(Color.BLACK)
                 .setContentTextSize(20)
                 .isDialog(true)
-                .setSelectOptions(defaultSelectOptions[0], defaultSelectOptions[1])
+                .setSelectOptions(firstCategory_pos - 1, secondCategory_pos - 1)
                 .build();
         pvOptions.setPicker(options1Items, options2Items);//二级选择器*/
         pvOptions.show();
-    }
-
-    private int[] getDefaultCategory(){
-        int[] res = new int[2];
-        FirstCategory firstCategory;
-        List<String> secondCategory;
-        for (int i = 0; i < options1Items.size(); i++){
-            firstCategory = options1Items.get(i);
-            if ("交通".equals(firstCategory.getName())){
-                res[0] = i;
-                secondCategory = firstCategory.getCategory();
-                for (int j = 0; j < secondCategory.size(); j++){
-                    if ("公交车".equals(secondCategory.get(j))){
-                        res[1] = j;
-                        break;
-                    }
-                }
-                break;
-            }
-        }
-        return res;
     }
 
     /**
@@ -224,7 +232,11 @@ public class AddOutFragment extends Fragment {
     private void showTimePickerDialog() {
         if (mTimePickerDialog == null) {
             Calendar calendar = Calendar.getInstance();
-            calendar.setTime(DateUtils.string2Date(systemTime, DateUtils.yyyyMMddHHmm.get()));
+            try {
+                calendar.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(add_out_tv_time.getText().toString()));
+            }catch (ParseException e) {
+                e.printStackTrace();
+            }
             mTimePickerDialog = new TimePickerBuilder(getContext(), new OnTimeSelectListener() {
                 @Override
                 public void onTimeSelected(Date date, View v) {
@@ -242,11 +254,54 @@ public class AddOutFragment extends Fragment {
         }
         mTimePickerDialog.show();
     }
-    public static AddOutFragment newInstance(String text){
-        AddOutFragment fragment = new AddOutFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("username",text);
-        fragment.setArguments(bundle);
-        return fragment;
+    private void init(View view){
+        getComponents(view);
+        InitList();
+        add_out_spinner_account.setItems(message.Account_name);
+        add_out_spinner_member.setItems(message.Member_name);
+        if (isEdit){
+            Transaction t = Bookkeeping_setting.Return_transaction(getActivity(),username,id);
+            money = new BigDecimal(t.amount).negate().movePointLeft(2);
+            time = (long)t.time* 60000;
+            account = t.aname;
+            member = t.mname;
+            if (options1Item.indexOf(t.cname) != -1){
+                firstCategory_pos = options1Item.indexOf(t.cname);
+                if (options2Items.get(firstCategory_pos).indexOf(t.sname) != -1){
+                    secondCategory_pos = options2Items.get(firstCategory_pos).indexOf(t.sname);
+                    add_out_tv_classification.setText(options1Items.get(firstCategory_pos ).getPickerViewText() + "-"
+                            + options2Items.get(firstCategory_pos).get(secondCategory_pos));
+                    firstCategory_pos++;
+                    secondCategory_pos++;
+                }else {
+                    add_out_tv_classification.setText(options1Items.get(firstCategory_pos ).getPickerViewText());
+                }
+            }else {
+                add_out_tv_classification.setText("无分类");
+            }
+            add_out_et_money.setText(money.toPlainString());
+            if (message.Account_name.indexOf(account) != -1){
+                account_pos = message.Account_name.indexOf(account) + 1;
+            }else {
+                account_pos = 1;
+            }
+            if (message.Member_name.indexOf(member) != -1){
+                member_pos = message.Member_name.indexOf(member) + 1;
+            }else {
+                member_pos = 1;
+            }
+            add_out_spinner_account.setSelectedIndex(account_pos - 1);
+            add_out_spinner_member.setSelectedIndex(member_pos - 1);
+            add_out_tv_time.setText(DateUtils.date2String(new Date(time), DateUtils.yyyyMMddHHmm.get()));
+            if (t.note != null){
+                add_out_et_remark.setText(t.note);
+            }
+        }else {
+            add_out_tv_time.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(System.currentTimeMillis())));
+            time = DateUtils.date2Millis(new Date(System.currentTimeMillis()));
+            account_pos = 1;
+        }
+        firstCategory_pos = 1;
+        secondCategory_pos = 1;
     }
 }

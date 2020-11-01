@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.jizhangdemo.R;
@@ -29,6 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.security.auth.callback.Callback;
+
 public class TabAddActivity extends AppCompatActivity {
 
     TabLayout tl;
@@ -40,8 +43,6 @@ public class TabAddActivity extends AppCompatActivity {
     private AddInFragment fragment1;
     private AddOutFragment fragment2;
     private AddTransferFragment fragment3;
-    private AddTemplateFragment fragment4;
-    private int id = -1,type,outaccount;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,13 +52,6 @@ public class TabAddActivity extends AppCompatActivity {
         username = userInfo.getUserName();
         bundle = new Bundle();
         bundle.putString("username",username);
-        if (getIntent().getExtras() != null){
-            id = getIntent().getExtras().getInt("id");
-            type = getIntent().getExtras().getInt("type");
-            outaccount = getIntent().getExtras().getInt("outaccount");
-            bundle.putInt("id",id);
-            bundle.putBoolean("isEdit",true);
-        }
         tl = findViewById(R.id.tablayout);
         vp = findViewById(R.id.viewpager);
         tb = findViewById(R.id.toolbar);
@@ -67,37 +61,29 @@ public class TabAddActivity extends AppCompatActivity {
         frags.add(fragment1);
         frags.add(fragment2);
         frags.add(fragment3);
-        frags.add(fragment4);
         titles.add("收入");
         titles.add("支出");
         titles.add("转账");
-        titles.add("模板");
         vpAdapter = new MyVPAdapter(this, getSupportFragmentManager(), titles, frags);
         vp.setAdapter(vpAdapter);
         tl.setTabMode(TabLayout.MODE_FIXED);
         tl.setupWithViewPager(vp);
         tb.inflateMenu(R.menu.menu_add);
         putBundleInFragment();
-        if (id != -1) {
-            if (outaccount == Transaction.NONTRANSFER) {
-                switch (type){
-                    case Transaction.INCOME:
-                        vp.setCurrentItem(0);
-                        break;
-                    case Transaction.EXPENSE:
-                        vp.setCurrentItem(1);
-                        break;
-                }
-            } else {
-                vp.setCurrentItem(2);
-            }
-        }
         tb.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.addT:
                         Toast.makeText(TabAddActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
+                        Fragment fg = vpAdapter.getItem(vp.getCurrentItem());
+                        if (fg instanceof AddInFragment) {
+                            ((AddInFragment) fg).save();
+                        } else if (fg instanceof AddOutFragment) {
+                            ((AddOutFragment) fg).save();
+                        } else if (fg instanceof AddTransferFragment) {
+                            ((AddTransferFragment) fg).save();
+                        }
                         break;
                     default:
                         Toast.makeText(TabAddActivity.this, "未知错误", Toast.LENGTH_SHORT).show();
@@ -134,13 +120,12 @@ public class TabAddActivity extends AppCompatActivity {
         fragment1 = new AddInFragment();
         fragment2 = new AddOutFragment();
         fragment3 = new AddTransferFragment();
-        fragment4 = new AddTemplateFragment();
 
     }
     private void putBundleInFragment(){
         fragment1.setArguments(bundle);
         fragment2.setArguments(bundle);
         fragment3.setArguments(bundle);
-        fragment4.setArguments(bundle);
     }
+
 }

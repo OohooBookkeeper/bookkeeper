@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.example.jizhangdemo.R;
+import com.example.jizhangdemo.UserInfo;
+import com.example.jizhangdemo.UserManage;
 import com.example.jizhangdemo.login.ResetPasswordActivity;
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 
@@ -18,6 +20,7 @@ public class ResetPassword2Activity extends AppCompatActivity {
     private EditText et_password,et_password_again;
     private String password,password_again;
     private Button btn_finish;
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +29,8 @@ public class ResetPassword2Activity extends AppCompatActivity {
         et_password = findViewById(R.id.et_reset_password);
         et_password_again = findViewById(R.id.et_reset_password_again);
         btn_finish = findViewById(R.id.btn_finish);
+        UserInfo userInfo = UserManage.getInstance().getUserInfo(this);
+        username = userInfo.getUserName();
 
         btn_finish.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,7 +51,17 @@ public class ResetPassword2Activity extends AppCompatActivity {
                             .content("两次输入密码不相同")
                             .positiveText("确定")
                             .show();
-                }else {
+                }
+                else if(User_setting.Change_password(ResetPassword2Activity.this,username,password,password_again) == 2){
+                    new MaterialDialog.Builder(ResetPassword2Activity.this)
+                            .iconRes(R.drawable.icon_warning)
+                            .title("提示")
+                            .content("密码不符合规范")
+                            .positiveText("确定")
+                            .show();
+                }
+                else {
+                    int i = User_setting.Change_password(ResetPassword2Activity.this,username,password,password_again);
                     finish();
                 }
             }

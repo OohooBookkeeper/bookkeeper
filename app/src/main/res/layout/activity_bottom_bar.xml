@@ -19,6 +19,7 @@
             android:elevation="5dp"
             app:navigationIcon="@drawable/menu">
             <TextView
+                android:id="@+id/btmnavttl"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="芜湖记账"

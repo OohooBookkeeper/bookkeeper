@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -261,6 +262,7 @@ public class HomePageActivity extends Fragment {
         if (t == null){
             return null;
         }else {
+            ImageView btn_edit = view.findViewById(R.id.btn_edit);
             TextView tv_day = view.findViewById(R.id.tv_day);
             TextView tv_day_of_week = view.findViewById(R.id.tv_day_of_week);
             TextView tv_secondCategory = view.findViewById(R.id.tv_second_category);
@@ -309,41 +311,25 @@ public class HomePageActivity extends Fragment {
             BigDecimal bd = new BigDecimal(t.amount);
             bd = bd.movePointLeft(2);
             tv_money.setText(bd.toString());
-            if (t.outaccount == Transaction.NONTRANSFER){
-                tv_money.setTextColor(Color.parseColor("#FFA500"));
+            if (t.outaccount != Transaction.NONTRANSFER){
+                tv_money.setTextColor(Color.parseColor("#1571BA"));
             }else if (t.amount > 0){
                 tv_money.setTextColor(Color.parseColor("#20BD27"));
             }else {
                 tv_money.setTextColor(Color.parseColor("#DF1111"));
             }
+            btn_edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("id",t.id);
+                    bundle.putInt("type",t.type);
+                    bundle.putInt("outaccount",t.outaccount);
+                    Intent intent = new Intent(getActivity(), ModifyActivity.class).putExtras(bundle);
+                    getActivity().startActivity(intent);
+                }
+            });
         }
         return view;
-    }
-    public BigDecimal getLineElementChildIn(List<Transaction> lb){
-        BigDecimal in = new BigDecimal(0);
-        for (Transaction t:lb){
-            if (t.outaccount == Transaction.NONTRANSFER) {
-                if (t.amount > 0) {
-                    BigDecimal am = new BigDecimal(t.amount);
-                    am = am.movePointLeft(2);
-                    in = in.add(am);
-                }
-            }
-        }
-        return in;
-    }
-
-    public BigDecimal getLineElementChildOut(List<Transaction> lb){
-        BigDecimal out = new BigDecimal(0);
-        for (Transaction t:lb){
-            if (t.outaccount == Transaction.NONTRANSFER) {
-                if (t.amount < 0) {
-                    BigDecimal am = (new BigDecimal(t.amount)).negate();
-                    am = am.movePointLeft(2);
-                    out = out.add(am);
-                }
-            }
-        }
-        return out;
     }
 }

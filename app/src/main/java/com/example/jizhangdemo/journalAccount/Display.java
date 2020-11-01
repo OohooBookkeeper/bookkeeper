@@ -110,292 +110,150 @@ public class Display {
     // 构造函数，要传入待展示的账本数据库
 
     private void createMap() {
-
         tByDate = new TreeMap<>(new Comp());
-
         expenseByCtg = new TreeMap<>(new Comp());
-
         incomeByCtg = new TreeMap<>(new Comp());
-
         transferByCtg = new TreeMap<>(new Comp());
-
         expenseBySctg = new TreeMap<>(new Comp());
-
         incomeBySctg = new TreeMap<>(new Comp());
-
         transferBySctg = new TreeMap<>(new Comp());
-
         tByAccount = new TreeMap<>(new Comp());
-
         tByMember = new TreeMap<>(new Comp());
-
         tByTrader = new TreeMap<>(new Comp());
-
         tByProject = new TreeMap<>(new Comp());
-
         for (Transaction t : transactions) {
-
             // 按时间划分账目
-
             Date d = new Date((long) t.time * 60000);
-
             int year, month, monthPassed;
-
             Calendar c = Calendar.getInstance();
-
             c.setTime(d);
-
             year = c.get(Calendar.YEAR);
-
             month = c.get(Calendar.MONTH);
-
             monthPassed = (year - 1970) * 12 + month - Calendar.JANUARY; // 计算从1970年1月到现在经过了几个月
-
             if (tByDate.containsKey(monthPassed))
-
                 tByDate.get(monthPassed).add(t);
-
             else {
-
                 List<Transaction> tInMonth = new LinkedList<>();
-
                 tInMonth.add(t);
-
                 tByDate.put(monthPassed, tInMonth);
-
             }
-
             // 按一级分类和二级分类划分账目
-
-            switch (t.type) {
-
-                case Transaction.EXPENSE:
-
-                    if (expenseByCtg.containsKey(t.category))
-
-                        expenseByCtg.get(t.category).add(t);
-
-                    else {
-
-                        List<Transaction> expenseInCtg = new LinkedList<>();
-
-                        expenseInCtg.add(t);
-
-                        expenseByCtg.put(t.category, expenseInCtg);
-
-                    }
-
-                    if (expenseBySctg.containsKey(t.subcategory))
-
-                        expenseBySctg.get(t.subcategory).add(t);
-
-                    else {
-
-                        List<Transaction> expenseInSctg = new LinkedList<>();
-
-                        expenseInSctg.add(t);
-
-                        expenseBySctg.put(t.subcategory, expenseInSctg);
-
-                    }
-
-                    break;
-
-                case Transaction.INCOME:
-
-                    if (incomeByCtg.containsKey(t.category))
-
-                        incomeByCtg.get(t.category).add(t);
-
-                    else {
-
-                        List<Transaction> incomeInCtg = new LinkedList<>();
-
-                        incomeInCtg.add(t);
-
-                        incomeByCtg.put(t.category, incomeInCtg);
-
-                    }
-
-                    if (incomeBySctg.containsKey(t.subcategory))
-
-                        incomeBySctg.get(t.subcategory).add(t);
-
-                    else {
-
-                        List<Transaction> incomeInSctg = new LinkedList<>();
-
-                        incomeInSctg.add(t);
-
-                        incomeBySctg.put(t.subcategory, incomeInSctg);
-
-                    }
-
-                    break;
-
-                case Transaction.TRANSFER:
-
-                    if (transferByCtg.containsKey(t.category))
-
-                        transferByCtg.get(t.category).add(t);
-
-                    else {
-
-                        List<Transaction> transferInCtg = new LinkedList<>();
-
-                        transferInCtg.add(t);
-
-                        transferByCtg.put(t.category, transferInCtg);
-
-                    }
-
-                    if (transferBySctg.containsKey(t.subcategory))
-
-                        transferBySctg.get(t.subcategory).add(t);
-
-                    else {
-
-                        List<Transaction> transferInSctg = new LinkedList<>();
-
-                        transferInSctg.add(t);
-
-                        transferBySctg.put(t.subcategory, transferInSctg);
-
-                    }
-
-                    break;
-
-                default: // 无效账目
-
-                    break;
-
-            }
-
-            // 按支付账户划分账目
-
             if (t.outaccount == Transaction.NONTRANSFER) {
-
-                if (tByAccount.containsKey(t.account))
-
-                    tByAccount.get(t.account).add(t);
-
-                else {
-
-                    List<Transaction> tOfAccount = new LinkedList<>();
-
-                    tOfAccount.add(t);
-
-                    tByAccount.put(t.account, tOfAccount);
-
+                if (t.type == Transaction.EXPENSE) {
+                    if (expenseByCtg.containsKey(t.category))
+                        expenseByCtg.get(t.category).add(t);
+                    else {
+                        List<Transaction> expenseInCtg = new LinkedList<>();
+                        expenseInCtg.add(t);
+                        expenseByCtg.put(t.category, expenseInCtg);
+                    }
+                    if (expenseBySctg.containsKey(t.subcategory))
+                        expenseBySctg.get(t.subcategory).add(t);
+                    else {
+                        List<Transaction> expenseInSctg = new LinkedList<>();
+                        expenseInSctg.add(t);
+                        expenseBySctg.put(t.subcategory, expenseInSctg);
+                    }
+                } else if (t.type == Transaction.INCOME) {
+                    if (incomeByCtg.containsKey(t.category))
+                        incomeByCtg.get(t.category).add(t);
+                    else {
+                        List<Transaction> incomeInCtg = new LinkedList<>();
+                        incomeInCtg.add(t);
+                        incomeByCtg.put(t.category, incomeInCtg);
+                    }
+                    if (incomeBySctg.containsKey(t.subcategory))
+                        incomeBySctg.get(t.subcategory).add(t);
+                    else {
+                        List<Transaction> incomeInSctg = new LinkedList<>();
+                        incomeInSctg.add(t);
+                        incomeBySctg.put(t.subcategory, incomeInSctg);
+                    }
                 }
-
             } else {
-
+                if (transferByCtg.containsKey(t.category))
+                    transferByCtg.get(t.category).add(t);
+                else {
+                    List<Transaction> transferInCtg = new LinkedList<>();
+                    transferInCtg.add(t);
+                    transferByCtg.put(t.category, transferInCtg);
+                }
+                if (transferBySctg.containsKey(t.subcategory))
+                    transferBySctg.get(t.subcategory).add(t);
+                else {
+                    List<Transaction> transferInSctg = new LinkedList<>();
+                    transferInSctg.add(t);
+                    transferBySctg.put(t.subcategory, transferInSctg);
+                }
+            }
+            // 按支付账户划分账目
+            if (t.outaccount == Transaction.NONTRANSFER) {
+                if (tByAccount.containsKey(t.account))
+                    tByAccount.get(t.account).add(t);
+                else {
+                    List<Transaction> tOfAccount = new LinkedList<>();
+                    tOfAccount.add(t);
+                    tByAccount.put(t.account, tOfAccount);
+                }
+            } else {
                 Transaction tout = t.copy(); // 转出账户
-
                 Transaction tin = t.copy(); // 转入账户
-
                 tout.amount = -tout.amount;
-
                 tin.account = tout.outaccount;
-
                 if (tByAccount.containsKey(tout.account))
-
                     tByAccount.get(tout.account).add(tout);
-
                 else {
-
                     List<Transaction> tOfAccount = new LinkedList<>();
-
                     tOfAccount.add(tout);
-
                     tByAccount.put(tout.account, tOfAccount);
-
                 }
-
                 if (tByAccount.containsKey(tin.account))
-
                     tByAccount.get(tin.account).add(tin);
-
                 else {
-
                     List<Transaction> tOfAccount = new LinkedList<>();
-
                     tOfAccount.add(tin);
-
                     tByAccount.put(tin.account, tOfAccount);
-
                 }
-
             }
-
             // 按成员划分账目
-
             if (tByMember.containsKey(t.member))
-
                 tByMember.get(t.member).add(t);
-
             else {
-
                 List<Transaction> tOfMember = new LinkedList<>();
-
                 tOfMember.add(t);
-
                 tByMember.put(t.member, tOfMember);
-
             }
-
             // 按商家划分账目
-
             if (tByTrader.containsKey(t.trader))
-
                 tByTrader.get(t.trader).add(t);
-
             else {
-
                 List<Transaction> tOfTrader = new LinkedList<>();
-
                 tOfTrader.add(t);
-
                 tByTrader.put(t.trader, tOfTrader);
-
             }
-
             // 按项目划分账目
-
             if (tByProject.containsKey(t.project))
-
                 tByProject.get(t.project).add(t);
-
             else {
-
                 List<Transaction> tOfProject = new LinkedList<>();
-
                 tOfProject.add(t);
-
                 tByProject.put(t.project, tOfProject);
-
             }
-
         }
-
     }
 
 
     // 对数据库做了删除或修改后，请及时调用这个函数
 
     public void notifyDatasetChanged() {
-
         this.loadData();
-
         this.createMap();
-
     }
 
 
     // 获得统计信息
 
-    public List<PieEntry> getStatsByCtg(Date startDate, Date endDate, int type) {
+    public List<PieEntry> getStatsByCtg(Date startDate, Date endDate, int type, Map<String, Integer> ctg) {
         List<PieEntry> eList = new ArrayList<>();
         Map<Integer, Integer> stats = new HashMap<>();
         Map<Integer, String> ctgs = new HashMap<>();
@@ -457,13 +315,14 @@ public class Display {
         int i = 1;
         for (int category : stats.keySet()) {
             String label = ctgs.containsKey(category) ? ctgs.get(category) : "未知分类" + i++;
+            ctg.put(label, category);
             float value = (float) stats.get(category) / sum;
             eList.add(new PieEntry(value, label));
         }
         return eList;
     }
 
-    public List<PieEntry> getStatsBySctg(Date startDate, Date endDate, int type) {
+    public List<PieEntry> getStatsBySctg(Date startDate, Date endDate, int type, Map<String, Integer> sctg) {
         List<PieEntry> eList = new ArrayList<>();
         Map<Integer, Integer> stats = new HashMap<>();
         Map<Integer, String> sctgs = new HashMap<>();
@@ -525,13 +384,14 @@ public class Display {
         int i = 1;
         for (int subcategory : stats.keySet()) {
             String label = sctgs.containsKey(subcategory) ? sctgs.get(subcategory) : "未知分类" + i++;
+            sctg.put(label, subcategory);
             float value = (float) stats.get(subcategory) / sum;
             eList.add(new PieEntry(value, label));
         }
         return eList;
     }
 
-    public List<PieEntry> getStatsByMember(Date startDate, Date endDate, int type) {
+    public List<PieEntry> getStatsByMember(Date startDate, Date endDate, int type, Map<String, Integer> mem) {
         List<PieEntry> eList = new ArrayList<>();
         Map<Integer, Integer> stats = new HashMap<>();
         Map<Integer, String> members = new HashMap<>();
@@ -593,6 +453,7 @@ public class Display {
         int i = 1;
         for (int member : stats.keySet()) {
             String label = members.containsKey(member) ? members.get(member) : "未知成员" + i++;
+            mem.put(label, member);
             float value = (float) stats.get(member) / sum;
             eList.add(new PieEntry(value, label));
         }
@@ -739,101 +600,102 @@ public class Display {
     // sub表示是否按二级分类展示，type表示分类的类型，比如如果传入Transaction.EXPENSE，则仅返回支出分类的数据
 
     public Map<Integer, List<Transaction>> displayByCtg(Date startDate, Date endDate, boolean sub, int type) {
-
         Map<Integer, List<Transaction>> srcMap;
-
         if (sub) {
-
             switch (type) {
-
                 case Transaction.EXPENSE:
-
                     srcMap = this.expenseBySctg;
-
                     break;
-
                 case Transaction.INCOME:
-
                     srcMap = this.incomeBySctg;
-
                     break;
-
                 case Transaction.TRANSFER:
-
                     srcMap = this.transferBySctg;
-
                     break;
-
                 default:
-
                     throw new IllegalStateException("Unexpected value: " + type);
-
             }
-
         } else {
-
             switch (type) {
-
                 case Transaction.EXPENSE:
-
                     srcMap = this.expenseByCtg;
-
                     break;
-
                 case Transaction.INCOME:
-
                     srcMap = this.incomeByCtg;
-
                     break;
-
                 case Transaction.TRANSFER:
-
                     srcMap = this.transferByCtg;
-
                     break;
-
                 default:
-
                     throw new IllegalStateException("Unexpected value: " + type);
-
             }
-
         }
-
         Map<Integer, List<Transaction>> data = new TreeMap<>();
-
         for (int by : srcMap.keySet()) {
-
             for (Transaction t : srcMap.get(by)) {
-
                 Date d = new Date((long) t.time * 60000);
-
                 if (!d.before(startDate) && !d.after(endDate)) {
-
                     if (data.containsKey(by)) {
-
                         data.get(by).add(t);
-
                     } else {
-
                         List<Transaction> tList = new LinkedList<>();
-
                         tList.add(t);
-
                         data.put(by, tList);
-
                     }
-
                 }
-
             }
-
         }
-
         return data;
-
     }
 
+    public Map<Integer, List<Transaction>> displayByMember(Date startDate, Date endDate, int type) {
+        Map<Integer, List<Transaction>> data = new TreeMap<>();
+        for (int by : tByMember.keySet()) {
+            for (Transaction t : tByMember.get(by)) {
+                Date d = new Date((long) t.time * 60000);
+                if (!d.before(startDate) && !d.after(endDate)) {
+                    switch (type) {
+                        case Transaction.EXPENSE:
+                            if (t.outaccount == Transaction.NONTRANSFER && t.amount < 0) {
+                                if (data.containsKey(by)) {
+                                    data.get(by).add(t);
+                                } else {
+                                    List<Transaction> tList = new LinkedList<>();
+                                    tList.add(t);
+                                    data.put(by, tList);
+                                }
+                            }
+                            break;
+                        case Transaction.INCOME:
+                            if (t.outaccount == Transaction.NONTRANSFER && t.amount > 0) {
+                                if (data.containsKey(by)) {
+                                    data.get(by).add(t);
+                                } else {
+                                    List<Transaction> tList = new LinkedList<>();
+                                    tList.add(t);
+                                    data.put(by, tList);
+                                }
+                            }
+                            break;
+                        case Transaction.TRANSFER:
+                            if (t.outaccount != Transaction.NONTRANSFER) {
+                                if (data.containsKey(by)) {
+                                    data.get(by).add(t);
+                                } else {
+                                    List<Transaction> tList = new LinkedList<>();
+                                    tList.add(t);
+                                    data.put(by, tList);
+                                }
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+        return data;
+    }
 
     // 获取流水展示的数据，按支付账户划分，可选择年度统计或月度统计
 

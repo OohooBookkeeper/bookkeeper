@@ -5,231 +5,253 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.HomePageActivity">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-    <androidx.cardview.widget.CardView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        app:cardElevation="5dp"
-        app:cardCornerRadius="5dp"
-        android:orientation="vertical">
-        <LinearLayout
+        android:layout_height="match_parent">
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="#ffffff">
+            android:layout_height="match_parent">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#f2f6f9"
-                android:paddingStart="15dp"
-                android:paddingTop="10dp"
-                android:paddingEnd="15dp"
-                android:paddingBottom="10dp">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        app:cardElevation="5dp"
+                        app:cardCornerRadius="5dp"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:background="#ffffff">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="#f2f6f9"
+                                android:paddingStart="15dp"
+                                android:paddingTop="10dp"
+                                android:paddingEnd="15dp"
+                                android:paddingBottom="10dp">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="统计信息"/>
+                            </LinearLayout>
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_margin="10dp">
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="50dp"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="0dp"
+                                        android:layout_weight="1"
+                                        android:text="本日" />
+                                    <TextView
+                                        android:id="@+id/tdated"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="0dp"
+                                        android:layout_weight="1"
+                                        android:text="XXXX-XX-XX" />
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="50dp"
+                                    android:layout_alignParentRight="true"
+                                    android:orientation="vertical"
+                                    android:gravity="end">
+                                    <TextView
+                                        android:id="@+id/tdi"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="0dp"
+                                        android:layout_weight="1"
+                                        android:textColor="#007f00"
+                                        android:text="本日收入" />
+                                    <TextView
+                                        android:id="@+id/tdo"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="0dp"
+                                        android:layout_weight="1"
+                                        android:textColor="#7f0000"
+                                        android:text="本日支出" />
+                                </LinearLayout>
+                            </RelativeLayout>
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_margin="10dp">
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="50dp"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="0dp"
+                                        android:layout_weight="1"
+                                        android:text="本周" />
+                                    <TextView
+                                        android:id="@+id/tdatew"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="0dp"
+                                        android:layout_weight="1"
+                                        android:text="XXXX-XX-XX到YYYY-YY-YY" />
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="50dp"
+                                    android:layout_alignParentRight="true"
+                                    android:orientation="vertical"
+                                    android:gravity="end">
+                                    <TextView
+                                        android:id="@+id/twi"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="0dp"
+                                        android:layout_weight="1"
+                                        android:textColor="#007f00"
+                                        android:text="本周收入" />
+                                    <TextView
+                                        android:id="@+id/two"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="0dp"
+                                        android:layout_weight="1"
+                                        android:textColor="#7f0000"
+                                        android:text="本周支出" />
+                                </LinearLayout>
+                            </RelativeLayout>
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_margin="10dp">
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="50dp"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="0dp"
+                                        android:layout_weight="1"
+                                        android:text="本月" />
+                                    <TextView
+                                        android:id="@+id/tdatem"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="0dp"
+                                        android:layout_weight="1"
+                                        android:text="XXXX-XX-XX到YYYY-YY-YY" />
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="50dp"
+                                    android:layout_alignParentRight="true"
+                                    android:orientation="vertical"
+                                    android:gravity="end">
+                                    <TextView
+                                        android:id="@+id/tmi"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="0dp"
+                                        android:layout_weight="1"
+                                        android:textColor="#007f00"
+                                        android:text="本月收入" />
+                                    <TextView
+                                        android:id="@+id/tmo"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="0dp"
+                                        android:layout_weight="1"
+                                        android:textColor="#7f0000"
+                                        android:text="本月支出" />
+                                </LinearLayout>
+                            </RelativeLayout>
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_margin="10dp">
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="50dp"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="0dp"
+                                        android:layout_weight="1"
+                                        android:text="本年" />
+                                    <TextView
+                                        android:id="@+id/tdatey"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="0dp"
+                                        android:layout_weight="1"
+                                        android:text="XXXX-XX-XX到YYYY-YY-YY" />
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="50dp"
+                                    android:layout_alignParentRight="true"
+                                    android:orientation="vertical"
+                                    android:gravity="end">
+                                    <TextView
+                                        android:id="@+id/tyi"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="0dp"
+                                        android:layout_weight="1"
+                                        android:textColor="#007f00"
+                                        android:text="本年收入" />
+                                    <TextView
+                                        android:id="@+id/tyo"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="0dp"
+                                        android:layout_weight="1"
+                                        android:textColor="#7f0000"
+                                        android:text="本年支出" />
+                                </LinearLayout>
+                            </RelativeLayout>
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:orientation="vertical"
+                        app:cardElevation="5dp"
+                        app:cardCornerRadius="5dp">
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:overScrollMode="never" />
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="统计信息"/>
+                    android:text="我是有底线的"
+                    android:layout_margin="16dp"
+                    android:textSize="16sp"
+                    android:textAlignment="center"
+                    />
             </LinearLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_margin="10dp">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:text="本日" />
-                    <TextView
-                        android:id="@+id/tdated"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:text="XXXX-XX-XX" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_alignParentRight="true"
-                    android:orientation="vertical"
-                    android:gravity="end">
-                    <TextView
-                        android:id="@+id/tdi"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:textColor="#007f00"
-                        android:text="本日收入" />
-                    <TextView
-                        android:id="@+id/tdo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:textColor="#7f0000"
-                        android:text="本日支出" />
-                </LinearLayout>
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_margin="10dp">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:text="本周" />
-                    <TextView
-                        android:id="@+id/tdatew"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:text="XXXX-XX-XX到YYYY-YY-YY" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_alignParentRight="true"
-                    android:orientation="vertical"
-                    android:gravity="end">
-                    <TextView
-                        android:id="@+id/twi"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:textColor="#007f00"
-                        android:text="本周收入" />
-                    <TextView
-                        android:id="@+id/two"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:textColor="#7f0000"
-                        android:text="本周支出" />
-                </LinearLayout>
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_margin="10dp">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:text="本月" />
-                    <TextView
-                        android:id="@+id/tdatem"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:text="XXXX-XX-XX到YYYY-YY-YY" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_alignParentRight="true"
-                    android:orientation="vertical"
-                    android:gravity="end">
-                    <TextView
-                        android:id="@+id/tmi"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:textColor="#007f00"
-                        android:text="本月收入" />
-                    <TextView
-                        android:id="@+id/tmo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:textColor="#7f0000"
-                        android:text="本月支出" />
-                </LinearLayout>
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_margin="10dp">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:text="本年" />
-                    <TextView
-                        android:id="@+id/tdatey"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:text="XXXX-XX-XX到YYYY-YY-YY" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_alignParentRight="true"
-                    android:orientation="vertical"
-                    android:gravity="end">
-                    <TextView
-                        android:id="@+id/tyi"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:textColor="#007f00"
-                        android:text="本年收入" />
-                    <TextView
-                        android:id="@+id/tyo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:textColor="#7f0000"
-                        android:text="本年支出" />
-                </LinearLayout>
-            </RelativeLayout>
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
+        </ScrollView>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:orientation="vertical"
-            app:cardElevation="5dp"
-            app:cardCornerRadius="5dp">
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:overScrollMode="never" />
-        </androidx.cardview.widget.CardView>
-
-</LinearLayout>
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        android:clickable="true"
-        android:src="@drawable/ic_swipe_menu_add"
-        android:focusable="true"
-        android:layout_gravity="end|bottom"
-        />
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:clickable="true"
+            android:src="@drawable/ic_swipe_menu_add"
+            android:focusable="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            />
+    </RelativeLayout>
 
 </FrameLayout>

@@ -1,21 +1,30 @@
 package com.example.jizhangdemo.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
-import android.view.Display;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.jizhangdemo.R;
 import com.example.jizhangdemo.add.BookHelper;
+import com.example.jizhangdemo.add.ModifyActivity;
+import com.example.jizhangdemo.journalAccount.Display;
+import com.example.jizhangdemo.journalAccount.ExpandableListChildAdapter;
+import com.example.jizhangdemo.journalAccount.LineElementChild;
+import com.example.jizhangdemo.journalAccount.Transaction;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.data.Entry;
@@ -26,21 +35,27 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.xuexiang.xui.utils.ColorUtils;
+import com.xuexiang.xui.utils.WidgetUtils;
 import com.xuexiang.xui.widget.picker.widget.TimePickerView;
 import com.xuexiang.xui.widget.picker.widget.builder.TimePickerBuilder;
 import com.xuexiang.xui.widget.picker.widget.listener.OnTimeSelectListener;
 import com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static java.lang.Math.abs;
 
-public class StatisticsActivity extends Fragment implements OnChartValueSelectedListener {
+public class StatisticsActivity extends Fragment {
 
     private MaterialSpinner spinner_select_in_or_out,spinner_select_how_to_show;
     private Button btn_DateStart,btn_DateEnd;
@@ -53,8 +68,9 @@ public class StatisticsActivity extends Fragment implements OnChartValueSelected
     private com.example.jizhangdemo.journalAccount.Display display;
     private BookHelper bkhp;
     private String username;
-
-
+    private RecyclerView recyclerView;
+    private List<List<Transaction>> data_double;
+    private Map<String, Integer> map;
 
     @Nullable
     @Override
@@ -67,6 +83,7 @@ public class StatisticsActivity extends Fragment implements OnChartValueSelected
         }
         bkhp = new BookHelper(getActivity(), username+".db");
         display = new com.example.jizhangdemo.journalAccount.Display(bkhp);
+        map = new HashMap<>();
         return view;
     }
 
@@ -78,6 +95,7 @@ public class StatisticsActivity extends Fragment implements OnChartValueSelected
         btn_DateEnd = view.findViewById(R.id.btn_chart_DateEnd);
         btn_DateStart = view.findViewById(R.id.btn_chart_DateStart);
         mPieChart = view.findViewById(R.id.chart);
+        recyclerView = view.findViewById(R.id.trList);
 
         InitSpinner();
         init_time_picker();
@@ -89,23 +107,13 @@ public class StatisticsActivity extends Fragment implements OnChartValueSelected
             Toast.makeText(getActivity(),"无有效数据",Toast.LENGTH_SHORT).show();
         }
 
-        mPieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-            @Override
-            public void onValueSelected(Entry e, Highlight h) {
-
-            }
-
-            @Override
-            public void onNothingSelected() {
-
-            }
-        });
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        select_in_or_out = spinner_select_in_or_out.getSelectedIndex();
+        searchType = spinner_select_how_to_show.getSelectedIndex() + 1;
         LoadData();
     }
 
@@ -124,6 +132,7 @@ public class StatisticsActivity extends Fragment implements OnChartValueSelected
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
                 select_in_or_out = position;
                 LoadData();
+                recyclerView.setAdapter(new ExpandableListChildAdapter(recyclerView, null , getActivity()));
             }
         });
 
@@ -132,6 +141,7 @@ public class StatisticsActivity extends Fragment implements OnChartValueSelected
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
                 searchType = position + 1;
                 LoadData();
+                recyclerView.setAdapter(new ExpandableListChildAdapter(recyclerView, null , getActivity()));
             }
         });
     }
@@ -141,7 +151,7 @@ public class StatisticsActivity extends Fragment implements OnChartValueSelected
      */
     private void init_time_picker(){
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date(System.currentTimeMillis()));
+        setToLastMinute(calendar);
         DateEnd = calendar.getTime();
         btn_DateEnd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,7 +208,7 @@ public class StatisticsActivity extends Fragment implements OnChartValueSelected
         searchType = 1;
         select_in_or_out = 0;
         display.notifyDatasetChanged();
-        mGraphData = display.getStatsByCtg(DateStart,DateEnd,select_in_or_out);
+        mGraphData = display.getStatsByCtg(DateStart, DateEnd, select_in_or_out, map);
 
         //设置图标中心文字
         mPieChart.setCenterTextSize(20);
@@ -220,7 +230,70 @@ public class StatisticsActivity extends Fragment implements OnChartValueSelected
         mPieChart.setRotationEnabled(true);
         mPieChart.setHighlightPerTapEnabled(true);
 
-        mPieChart.setOnChartValueSelectedListener(this);
+        mPieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                if (e == null)
+                    return;
+                PieEntry entry = (PieEntry) e;
+                Map<Integer, List<Transaction>> data = null;
+                int inout = spinner_select_in_or_out.getSelectedIndex();
+                int by = spinner_select_how_to_show.getSelectedIndex();
+                switch (inout * 3 + by) {
+                    case 0:
+                        data = display.displayByCtg(DateStart, DateEnd, false, Transaction.EXPENSE);
+                        break;
+                    case 1:
+                        data = display.displayByCtg(DateStart, DateEnd, true, Transaction.EXPENSE);
+                        break;
+                    case 2:
+                        data = display.displayByMember(DateStart, DateEnd, Transaction.EXPENSE);
+                        break;
+                    case 3:
+                        data = display.displayByCtg(DateStart, DateEnd, false, Transaction.INCOME);
+                        break;
+                    case 4:
+                        data = display.displayByCtg(DateStart, DateEnd, true, Transaction.INCOME);
+                        break;
+                    case 5:
+                        data = display.displayByMember(DateStart, DateEnd, Transaction.INCOME);
+                        break;
+                    default:
+                        return;
+                }
+                Calendar c = Calendar.getInstance();
+                c.setTime(new Date());
+                Calendar c2 = Calendar.getInstance();
+                c2.setTime(new Date());
+                setToFirstMinute(c);
+                setToLastMinute(c2);
+                if (data != null) {
+                    data_double = new LinkedList<>();
+                    data_double.add(data.get(map.get(entry.getLabel())));
+                }
+                List<LineElementChild> llec= new LinkedList<>();
+                for (List<Transaction> lt :data_double){
+                    if (lt != null && !lt.isEmpty()){
+                        List<View> lv = new LinkedList<>();
+                        for (Transaction t:lt){
+                            if (t != null){
+                                lv.add(BillToViewAdapter(t));
+                            }
+                        }
+                        LineElementChild lec = new LineElementChild(entry.getLabel(),"",
+                                "","",lv);
+                        llec.add(lec);
+                    }
+                }
+                WidgetUtils.initRecyclerView(recyclerView);
+                recyclerView.setAdapter(new ExpandableListChildAdapter(recyclerView, llec, getActivity()));
+            }
+
+            @Override
+            public void onNothingSelected() {
+                recyclerView.setAdapter(new ExpandableListChildAdapter(recyclerView, null , getActivity()));
+            }
+        });
     }
 
     private void initPieChart(){
@@ -249,17 +322,29 @@ public class StatisticsActivity extends Fragment implements OnChartValueSelected
         mPieChart.invalidate();
     }
 
+    public void setToFirstMinute(Calendar c) {
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+    }
+
+    public void setToLastMinute(Calendar c) {
+        c.set(Calendar.HOUR_OF_DAY, 23);
+        c.set(Calendar.MINUTE, 59);
+        c.set(Calendar.SECOND, 0);
+    }
+
     private void LoadData(){
         display.notifyDatasetChanged();
         switch (searchType){
             case 1:
-                mGraphData = display.getStatsByCtg(DateStart,DateEnd,select_in_or_out);
+                mGraphData = display.getStatsByCtg(DateStart, DateEnd, select_in_or_out, map);
                 break;
             case 2:
-                mGraphData = display.getStatsBySctg(DateStart,DateEnd,select_in_or_out);
+                mGraphData = display.getStatsBySctg(DateStart, DateEnd, select_in_or_out, map);
                 break;
             case 3:
-                mGraphData = display.getStatsByMember(DateStart,DateEnd,select_in_or_out);
+                mGraphData = display.getStatsByMember(DateStart, DateEnd, select_in_or_out, map);
                 break;
             default:
                 Toast.makeText(getActivity(),"非法排序依据！",Toast.LENGTH_SHORT).show();
@@ -272,14 +357,80 @@ public class StatisticsActivity extends Fragment implements OnChartValueSelected
             Toast.makeText(getActivity(),"无符号数据",Toast.LENGTH_SHORT).show();
         }
     }
+    public View BillToViewAdapter(Transaction t){
+        LayoutInflater mInflater = LayoutInflater.from(getActivity());
+        View view = mInflater.inflate(R.layout.adapter_bill,null);
+        if (t == null){
+            return null;
+        }else {
+            ImageView btn_edit = view.findViewById(R.id.btn_edit);
+            TextView tv_day = view.findViewById(R.id.tv_day);
+            TextView tv_day_of_week = view.findViewById(R.id.tv_day_of_week);
+            TextView tv_secondCategory = view.findViewById(R.id.tv_second_category);
+            TextView tv_time = view.findViewById(R.id.tv_time);
+            TextView tv_account = view.findViewById(R.id.tv_account);
+            TextView tv_money = view.findViewById(R.id.tv_money);
 
-    @Override
-    public void onValueSelected(Entry e, Highlight h) {
+            Date d = new Date((long) t.time * 60000);
+            SimpleDateFormat f = new SimpleDateFormat();
+            f.applyPattern("dd");
+            tv_day.setText(f.format(d));
+            f.applyPattern("E");
+            tv_day_of_week.setText(f.format(d));
+            if (t.outaccount != Transaction.NONTRANSFER){
+                tv_secondCategory.setText("转账");
+            } else if (t.sname == null) {
+                tv_secondCategory.setText("无分类");
+            } else {
+                tv_secondCategory.setText(t.sname);
+            }
 
-    }
+            f.applyPattern("HH:mm");
+            tv_time.setText(f.format(d));
+            if (t.outaccount == Transaction.NONTRANSFER){
+                if (t.aname == null) {
+                    tv_account.setText("无账户");
+                } else {
+                    tv_account.setText(t.aname);
+                }
+            } else {
+                StringBuilder str = new StringBuilder();
+                if (t.aname == null) {
+                    str.append("无账户");
+                } else {
+                    str.append(t.aname);
+                }
+                str.append(" → ");
+                if (t.oaname == null) {
+                    str.append("无账户");
+                } else {
+                    str.append(t.oaname);
+                }
+                tv_account.setText(str.toString());
+            }
 
-    @Override
-    public void onNothingSelected() {
-
+            BigDecimal bd = new BigDecimal(t.amount);
+            bd = bd.movePointLeft(2);
+            tv_money.setText(bd.toString());
+            if (t.outaccount != Transaction.NONTRANSFER){
+                tv_money.setTextColor(Color.parseColor("#1571BA"));
+            }else if (t.amount > 0){
+                tv_money.setTextColor(Color.parseColor("#20BD27"));
+            }else {
+                tv_money.setTextColor(Color.parseColor("#DF1111"));
+            }
+            btn_edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("id",t.id);
+                    bundle.putInt("type",t.type);
+                    bundle.putInt("outaccount",t.outaccount);
+                    Intent intent = new Intent(getActivity(), ModifyActivity.class).putExtras(bundle);
+                    getActivity().startActivity(intent);
+                }
+            });
+        }
+        return view;
     }
 }

@@ -50,11 +50,9 @@ public class signup extends Activity {
             byte[] encryptResult_answer = encrypt(ans, Key);
             String encryptResultStr_answer = parseByte2HexStr(encryptResult_answer);
             int defaultlogin = AccountHelper.PASSWD;
-            Log.d("test-signup", username + " " + password);
             accountHelper.signup(username, encryptResultStr, problem_num, encryptResultStr_answer, patternEnabled , pattern, defaultlogin);//将注册信息存入数据库
             Initialization.Initialization(context,username);
         }
-        Log.d("test-error-code", String.valueOf(error_code));
         return error_code;
     }
 

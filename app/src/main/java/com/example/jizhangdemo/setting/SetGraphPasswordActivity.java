@@ -1,16 +1,16 @@
 package com.example.jizhangdemo.setting;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.jizhangdemo.R;
-import com.example.jizhangdemo.login.GraphLoginActivity;
+import com.example.jizhangdemo.UserInfo;
+import com.example.jizhangdemo.UserManage;
 import com.example.jizhangdemo.login.NineSquare;
+import com.example.jizhangdemo.setting.User_setting;
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 
 public class SetGraphPasswordActivity extends AppCompatActivity implements NineSquare.OnPatternChangeListener{
@@ -28,6 +28,8 @@ public class SetGraphPasswordActivity extends AppCompatActivity implements NineS
         lqv = findViewById(R.id.lock_pattern_view);
         tv_hint = findViewById(R.id.tv_hint);
         lqv.setOnPatternChangeListener(this);
+        UserInfo userInfo = UserManage.getInstance().getUserInfo(this);
+        username = userInfo.getUserName();
     }
 
     @Override
@@ -55,7 +57,9 @@ public class SetGraphPasswordActivity extends AppCompatActivity implements NineS
                             .show();
                     flag = false;
                     tv_hint.setText("请输入图案密码");
-                }else {
+                }
+                else {
+                    User_setting.Setting_pattern_password(SetGraphPasswordActivity.this,username,first);
                     finish();
                 }
             }

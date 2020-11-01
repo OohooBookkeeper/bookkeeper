@@ -15,7 +15,6 @@ public class Return_message extends AppCompatActivity {
     static BookHelper bookhelper;
 
     public static Message Return(Context context, int Expense_or_income_or_transfer,String username) {
-        Log.d("test-username", username);
         bookhelper = new BookHelper(context,  username + ".db");
         Message M = new Message();
         M.Account_name = new ArrayList<>();
@@ -26,7 +25,6 @@ public class Return_message extends AppCompatActivity {
             } while (Account.moveToNext());
         }
 
-        Log.d("test-account",M.Account_name.toString());
         Cursor Member = bookhelper.listAll(bookhelper.MEMBER);
         M.Member_name = new ArrayList<>();
         if (Member.moveToFirst()) {
@@ -52,7 +50,6 @@ public class Return_message extends AppCompatActivity {
         }
 
         Cursor Category = bookhelper.listAll(bookhelper.CATEGORY);
-        Log.d("test-count", String.valueOf(Category.getCount()));
         List<Integer> Category_number = new ArrayList<>();
         List<Integer> Category_type_number = new ArrayList<>();
         List<String> Category_name = new ArrayList<>();
@@ -64,10 +61,8 @@ public class Return_message extends AppCompatActivity {
                 ;
                 Category_name.add( Category.getString(Category.getColumnIndex("name"))) ;
                 i++;
-                Log.d("test-category_name", Category.getString(Category.getColumnIndex("name")));
             } while (Category.moveToNext());
         }
-        Log.d("test-category_name", Category_name.toString());
 
         Cursor Subcategory = bookhelper.listAll(bookhelper.SUBCATEGORY);
         List<Integer> Subcategory_number = new ArrayList<>();

@@ -35,6 +35,7 @@ import com.google.android.material.navigation.NavigationView;
 
 public class BottomBarActivity extends AppCompatActivity {
 
+    private TextView headerText;
     private HomePageActivity fragment1;
     private JournalAccountActivity fragment2;
     private StatisticsActivity fragment4;
@@ -65,6 +66,8 @@ public class BottomBarActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putString("username", username);
 
+        headerText = findViewById(R.id.btmnavttl);
+
         fragment1 = new HomePageActivity();
         fragment2 = new JournalAccountActivity();
         fragment4 = new StatisticsActivity();
@@ -74,6 +77,8 @@ public class BottomBarActivity extends AppCompatActivity {
         fragment2.setArguments(bundle);
         fragment4.setArguments(bundle);
         fragment5.setArguments(bundle);
+
+        headerText.setText("首页");
 
         getSupportFragmentManager().beginTransaction().add(R.id.fl_container, fragment1).commitAllowingStateLoss();
         drawer = findViewById(R.id.drawer_home);
@@ -145,15 +150,17 @@ public class BottomBarActivity extends AppCompatActivity {
                     case R.id.btm_home:
                         getSupportFragmentManager().beginTransaction().replace(R.id.fl_container, fragment1).commitAllowingStateLoss();
                         btm_nav.getMenu().getItem(0).setChecked(true);
-
+                        headerText.setText("首页");
                         break;
                     case R.id.btm_list:
                         getSupportFragmentManager().beginTransaction().replace(R.id.fl_container, fragment2).commitAllowingStateLoss();
                         btm_nav.getMenu().getItem(1).setChecked(true);
+                        headerText.setText("流水");
                         break;
                     case R.id.btm_stats:
                         getSupportFragmentManager().beginTransaction().replace(R.id.fl_container, fragment4).commitAllowingStateLoss();
                         btm_nav.getMenu().getItem(2).setChecked(true);
+                        headerText.setText("图表");
                         break;
                     default:
                         Toast.makeText(BottomBarActivity.this, "未知错误", Toast.LENGTH_SHORT).show();
@@ -162,5 +169,6 @@ public class BottomBarActivity extends AppCompatActivity {
                 return false;
             }
         });
+        ((TextView) navView.getHeaderView(0).findViewById(R.id.slide_username)).setText(UserManage.getInstance().getUserInfo(this).getUserName());
     }
 }

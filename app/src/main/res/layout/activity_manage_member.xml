@@ -1,9 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".setting.ManageMemberActivity">
+    android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tb_home"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/xui_config_color_blue"
+        android:elevation="5dp">
+        <TextView
+            android:id="@+id/btmnavttl"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="成员管理"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            />
+    </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="新增成员"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/et_member"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            android:inputType="text"
+            android:hint="输入添加的成员"
+            android:padding="10dp"
+            android:layout_marginLeft="10dp"/>
+
+        <com.xuexiang.xui.widget.alpha.XUIAlphaButton
+            android:id="@+id/btn_confirm1"
+            style="@style/Button.Primary.wrap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="确认"
+            android:layout_marginLeft="10dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/tv_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="修改成员"
+            android:textSize="20sp"
+            android:layout_gravity="center_horizontal"/>
+
+        <com.xuexiang.xui.widget.alpha.XUIAlphaButton
+            android:id="@+id/btn_select_member"
+            style="@style/Button.Primary.wrap"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="选择成员"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="40dp">
+
+            <EditText
+                android:id="@+id/et_edit_member"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:inputType="text"
+                android:hint="输入修改后的成员"
+                android:padding="10dp"/>
+
+            <com.xuexiang.xui.widget.alpha.XUIAlphaButton
+                android:id="@+id/btn_confirm2"
+                style="@style/Button.Primary.wrap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="确认"
+                android:layout_marginLeft="20dp"/>
+
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:layout_marginTop="50dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="删除成员"
+            android:textSize="16sp" />
+
+        <com.xuexiang.xui.widget.alpha.XUIAlphaButton
+            android:id="@+id/btn_delete_member"
+            style="@style/Button.Primary.wrap"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="选择成员"
+            android:layout_marginLeft="20dp"/>
+
+        <com.xuexiang.xui.widget.alpha.XUIAlphaButton
+            android:id="@+id/btn_confirm3"
+            style="@style/Button.Primary.wrap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="确认"
+            android:layout_marginLeft="10dp"/>
+
+    </LinearLayout>
+</LinearLayout>

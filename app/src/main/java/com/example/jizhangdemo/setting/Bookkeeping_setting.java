@@ -3,6 +3,7 @@ package com.example.jizhangdemo.setting;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -49,20 +50,14 @@ public class Bookkeeping_setting extends Activity {
         Cursor member = bookhelper.listAll(bookhelper.MEMBER);
         if(member.moveToFirst()){
             do{
-                Member M = new Member();
-                M.member = member.getInt(member.getColumnIndex("member"));
-                M.name = member.getString(member.getColumnIndex("name"));
-                Sm.Member.add(M);
+                Sm.Member.add(member.getString(member.getColumnIndex("name")));
             }while (member.moveToNext());
         }
 
         Cursor account = bookhelper.listAll(bookhelper.ACCOUNT);
         if(account.moveToFirst()){
             do{
-                Account A = new Account();
-                A.account = account.getInt(account.getColumnIndex("account"));
-                A.name = account.getString(account.getColumnIndex("name"));
-                Sm.Account.add(A);
+                Sm.Account.add(account.getString(account.getColumnIndex("name")));
             }while (account.moveToNext());
         }
 
@@ -432,9 +427,41 @@ public class Bookkeeping_setting extends Activity {
         return error_code;
     }
 
-    public static int Add_Subcategory(Context context, String username, int category,String name){
+    public static int Add_expense_Subcategory(Context context, String username, int category_position,String name){
         int error_code = -1;
         bookhelper = new BookHelper(context , username+".db");
+        Cursor Category = bookhelper.listAll(bookhelper.CATEGORY);
+        Category.moveToFirst();
+        List<Integer> Expense_category = new ArrayList<>();
+        int category;
+        int i = Category.getCount();
+        for(int x = 0;x<i;x++){
+            if(Category.getInt(Category.getColumnIndex("type")) == 0){
+                Expense_category.add(Category.getInt(Category.getColumnIndex("category")));
+            }
+            Category.moveToNext();
+        }
+        category = Expense_category.get(category_position - 1);
+        bookhelper.addSubcategory(category,name);
+        error_code = 0;
+        return error_code;
+    }
+
+    public static int Add_income_Subcategory(Context context, String username, int category_position,String name){
+        int error_code = -1;
+        bookhelper = new BookHelper(context , username+".db");
+        Cursor Category = bookhelper.listAll(bookhelper.CATEGORY);
+        Category.moveToFirst();
+        List<Integer> Income_category = new ArrayList<>();
+        int category;
+        int i = Category.getCount();
+        for(int x = 0;x<i;x++){
+            if(Category.getInt(Category.getColumnIndex("type")) == 1){
+                Income_category.add(Category.getInt(Category.getColumnIndex("category")));
+            }
+            Category.moveToNext();
+        }
+        category = Income_category.get(category_position - 1);
         bookhelper.addSubcategory(category,name);
         error_code = 0;
         return error_code;
@@ -457,54 +484,248 @@ public class Bookkeeping_setting extends Activity {
     }
 
 
-    public static int Change_Category(Context context, String username, int category, int type, String name){
+
+    public static int Change_Expense_Category(Context context, String username, int position, int type, String name){
         int error_code = -1;
-        if((type != 1) && (type != 0)){
-            error_code = 1;
-            return error_code;
-        }
         bookhelper = new BookHelper(context , username+".db");
+        int category;
+        Cursor Category = bookhelper.listAll(bookhelper.CATEGORY);
+        Category.moveToFirst();
+        List<Integer> Expense_category = new ArrayList<>();
+        int i = Category.getCount();
+        for(int x = 0;x<i;x++){
+            if(Category.getInt(Category.getColumnIndex("type")) == 0){
+                Expense_category.add(Category.getInt(Category.getColumnIndex("category")));
+            }
+            Category.moveToNext();
+        }
+        category = Expense_category.get(position - 1);
         bookhelper.updateCategory(category,type,name);
         error_code = 0;
         return error_code;
     }
 
-    public static int Change_Subcategory(Context context, String username, int subcategory, int category,String name){
+    public static int Change_Income_Category(Context context, String username, int position, int type, String name){
         int error_code = -1;
-        bookhelper = new BookHelper(context,username+".db");
-        bookhelper.updateCategory(subcategory,category,name);
+        bookhelper = new BookHelper(context , username+".db");
+        int category;
+        Cursor Category = bookhelper.listAll(bookhelper.CATEGORY);
+        Category.moveToFirst();
+        List<Integer> Income_category = new ArrayList<>();
+        int i = Category.getCount();
+        for(int x = 0;x<i;x++){
+            if(Category.getInt(Category.getColumnIndex("type")) == 1){
+                Income_category.add(Category.getInt(Category.getColumnIndex("category")));
+            }
+            Category.moveToNext();
+        }
+        category = Income_category.get(position - 1);
+
+        bookhelper.updateCategory(category,type,name);
         error_code = 0;
         return error_code;
     }
 
-    public static int Change_Account(Context context, String username, int account,String name){
+    public static int Change_expense_Subcategory(Context context, String username, int Subcategory_position, int Category_position, String name){
         int error_code = -1;
         bookhelper = new BookHelper(context,username+".db");
+        int subcategory,category;
+        Cursor Category = bookhelper.listAll(bookhelper.CATEGORY);
+        List<Integer> Expense_category = new ArrayList<>();
+        Category.moveToFirst();
+        int i = Category.getCount();
+        for(int x = 0;x<i;x++){
+            if(Category.getInt(Category.getColumnIndex("type")) == 0){
+                Expense_category.add(Category.getInt(Category.getColumnIndex("category")));
+            }
+            Category.moveToNext();
+        }
+        category = Expense_category.get(Category_position - 1);
+
+        Cursor Subcategory = bookhelper.listAll(bookhelper.SUBCATEGORY);
+        List<Integer> subcategory_list = new ArrayList<>();
+        Subcategory.moveToFirst();
+        int j = Subcategory.getCount();
+        for(int y = 0;y<j;y++){
+            if(Subcategory.getInt(Subcategory.getColumnIndex("category")) == category){
+                subcategory_list.add(Subcategory.getInt(Subcategory.getColumnIndex("subcategory")));
+            }
+            Subcategory.moveToNext();
+        }
+        subcategory = subcategory_list.get(Subcategory_position - 1);
+        bookhelper.updateSubcategory(subcategory,category,name);
+        error_code = 0;
+        return error_code;
+    }
+
+    public static int Change_income_Subcategory(Context context, String username, int Subcategory_position, int Category_position, String name){
+        int error_code = -1;
+        bookhelper = new BookHelper(context,username+".db");
+        int subcategory,category;
+        Cursor Category = bookhelper.listAll(bookhelper.CATEGORY);
+        List<Integer> Income_category = new ArrayList<>();
+        Category.moveToFirst();
+        int i = Category.getCount();
+        for(int x = 0;x<i;x++){
+            if(Category.getInt(Category.getColumnIndex("type")) == 1){
+                Income_category.add(Category.getInt(Category.getColumnIndex("category")));
+            }
+            Category.moveToNext();
+        }
+        category = Income_category.get(Category_position - 1);
+
+        Cursor Subcategory = bookhelper.listAll(bookhelper.SUBCATEGORY);
+        List<Integer> subcategory_list = new ArrayList<>();
+        Subcategory.moveToFirst();
+        int j = Subcategory.getCount();
+        for(int y = 0;y<j;y++){
+            if(Subcategory.getInt(Subcategory.getColumnIndex("category")) == category){
+                subcategory_list.add(Subcategory.getInt(Subcategory.getColumnIndex("subcategory")));
+            }
+            Subcategory.moveToNext();
+        }
+        subcategory = subcategory_list.get(Subcategory_position - 1);
+        bookhelper.updateSubcategory(subcategory,category,name);
+        error_code = 0;
+        return error_code;
+    }
+
+    public static int Change_Account(Context context, String username, int position,String name){
+        int error_code = -1;
+        bookhelper = new BookHelper(context,username+".db");
+        int account;
+        Cursor account_cursor = bookhelper.listAll(bookhelper.ACCOUNT);
+        account_cursor.moveToFirst();
+        List<Integer> Account = new ArrayList<>();
+        int i = account_cursor.getCount();
+        for(int x=0;x<i;x++){
+            Account.add(account_cursor.getInt(account_cursor.getColumnIndex("account")));
+            account_cursor.moveToNext();
+        }
+        account = Account.get(position - 1);
         bookhelper.updateAccount(account, name);
         error_code = 1;
         return error_code;
     }
 
-    public static int Change_Member(Context context, String username, int member,String name){
+    public static int Change_Member(Context context, String username, int position,String name){
         int error_code = -1;
         bookhelper = new BookHelper(context,username+".db");
+        int member;
+        Cursor Member_cursor = bookhelper.listAll(bookhelper.MEMBER);
+        Member_cursor.moveToFirst();
+        List<Integer> Member = new ArrayList<>();
+        int i = Member_cursor.getCount();
+        for(int x = 0;x<i;x++){
+            Member.add(Member_cursor.getInt(Member_cursor.getColumnIndex("member")));
+            Member_cursor.moveToNext();
+        }
+        member = Member.get(position - 1);
         bookhelper.updateMember(member, name);
         error_code = 1;
         return error_code;
     }
 
 
-    public static int Delete_Category(Context context, String username, int category){
+    public static int Delete_income_Category(Context context, String username, int position){
         int error_code = -1;
         bookhelper = new BookHelper(context,username+".db");
+        int category;
+        Cursor Category = bookhelper.listAll(bookhelper.CATEGORY);
+        Category.moveToFirst();
+        List<Integer> Income_category = new ArrayList<>();
+        int i = Category.getCount();
+        for(int x = 0;x<i;x++){
+            if(Category.getInt(Category.getColumnIndex("type")) == 1){
+                Income_category.add(Category.getInt(Category.getColumnIndex("category")));
+            }
+            Category.moveToNext();
+        }
+        category = Income_category.get(position - 1);
         bookhelper.deleteCategory(category);
         error_code = 0;
         return error_code;
     }
 
-    public static int Delete_Subcategory(Context context, String username, int subcategory){
+    public static int Delete_expense_Category(Context context, String username, int position){
         int error_code = -1;
         bookhelper = new BookHelper(context,username+".db");
+        int category;
+        Cursor Category = bookhelper.listAll(bookhelper.CATEGORY);
+        Category.moveToFirst();
+        List<Integer> Expense_category = new ArrayList<>();
+        int i = Category.getCount();
+        for(int x = 0;x<i;x++){
+            if(Category.getInt(Category.getColumnIndex("type")) == 0){
+                Expense_category.add(Category.getInt(Category.getColumnIndex("category")));
+            }
+            Category.moveToNext();
+        }
+        category = Expense_category.get(position - 1);
+        bookhelper.deleteCategory(category);
+        error_code = 0;
+        return error_code;
+    }
+
+    public static int Delete_income_Subcategory(Context context, String username, int subcategory_position, int category_position){
+        int error_code = -1;
+        bookhelper = new BookHelper(context,username+".db");
+        int subcategory,category;
+        Cursor Category = bookhelper.listAll(bookhelper.CATEGORY);
+        List<Integer> Income_category = new ArrayList<>();
+        Category.moveToFirst();
+        int i = Category.getCount();
+        for(int x = 0;x<i;x++){
+            if(Category.getInt(Category.getColumnIndex("type")) == 1){
+                Income_category.add(Category.getInt(Category.getColumnIndex("category")));
+            }
+            Category.moveToNext();
+        }
+        category = Income_category.get(category_position - 1);
+
+        Cursor Subcategory = bookhelper.listAll(bookhelper.SUBCATEGORY);
+        List<Integer> subcategory_list = new ArrayList<>();
+        Subcategory.moveToFirst();
+        int j = Subcategory.getCount();
+        for(int y = 0;y<j;y++){
+            if(Subcategory.getInt(Subcategory.getColumnIndex("category")) == category){
+                subcategory_list.add(Subcategory.getInt(Subcategory.getColumnIndex("subcategory")));
+            }
+            Subcategory.moveToNext();
+        }
+        subcategory = subcategory_list.get(subcategory_position - 1);
+        bookhelper.deleteSubcategory(subcategory);
+        error_code = 0;
+        return error_code;
+    }
+
+    public static int Delete_Expense_Subcategory(Context context, String username, int subcategory_position, int category_position){
+        int error_code = -1;
+        bookhelper = new BookHelper(context,username+".db");
+        int subcategory,category;
+        Cursor Category = bookhelper.listAll(bookhelper.CATEGORY);
+        List<Integer> Expense_category = new ArrayList<>();
+        Category.moveToFirst();
+        int i = Category.getCount();
+        for(int x = 0;x<i;x++){
+            if(Category.getInt(Category.getColumnIndex("type")) == 0){
+                Expense_category.add(Category.getInt(Category.getColumnIndex("category")));
+            }
+            Category.moveToNext();
+        }
+        category = Expense_category.get(category_position - 1);
+
+        Cursor Subcategory = bookhelper.listAll(bookhelper.SUBCATEGORY);
+        List<Integer> subcategory_list = new ArrayList<>();
+        Subcategory.moveToFirst();
+        int j = Subcategory.getCount();
+        for(int y = 0;y<j;y++){
+            if(Subcategory.getInt(Subcategory.getColumnIndex("category")) == category){
+                subcategory_list.add(Subcategory.getInt(Subcategory.getColumnIndex("subcategory")));
+            }
+            Subcategory.moveToNext();
+        }
+        subcategory = subcategory_list.get(subcategory_position - 1);
         bookhelper.deleteSubcategory(subcategory);
         error_code = 0;
         return error_code;

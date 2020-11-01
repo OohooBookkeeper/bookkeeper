@@ -17,7 +17,6 @@ import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 
 public class VerifyPasswordActivity extends AppCompatActivity {
 
-    private ImageButton btn_back;
     private Button btn_next;
     private EditText et_password;
     private int flag;
@@ -27,19 +26,11 @@ public class VerifyPasswordActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_password);
-        btn_back = findViewById(R.id.btn_back);
         btn_next = findViewById(R.id.btn_next);
         et_password = findViewById(R.id.et_password);
         flag = getIntent().getExtras().getInt("flag");
         UserInfo userInfo = UserManage.getInstance().getUserInfo(this);
         username = userInfo.getUserName();
-
-        btn_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override

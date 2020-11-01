@@ -24,6 +24,7 @@ import com.bumptech.glide.request.transition.NoTransition;
 import com.example.jizhangdemo.R;
 import com.example.jizhangdemo.UserManage;
 import com.example.jizhangdemo.add.BookHelper;
+import com.example.jizhangdemo.add.ModifyActivity;
 import com.example.jizhangdemo.add.TabAddActivity;
 import com.example.jizhangdemo.journalAccount.Display;
 import com.example.jizhangdemo.journalAccount.ExpandableListAdapter;
@@ -354,7 +355,7 @@ public class JournalAccountActivity extends Fragment {
                 Toast.makeText(getActivity(), "非法排序依据！", Toast.LENGTH_SHORT).show();
                 return;
         }
-        if (searchType == 1 || searchType == 6 || searchType == 7 || searchType == 8 || searchType == 9){
+        if (searchType == 1 || searchType == 6 || searchType == 7){
             tv_num_sum.setText(String.valueOf(getSumIn(data_triple).subtract(getSumOut(data_triple))));
             tv_num_in.setText(String.valueOf(getSumIn(data_triple)));
             tv_num_out.setText(String.valueOf(getSumOut(data_triple)));
@@ -402,6 +403,52 @@ public class JournalAccountActivity extends Fragment {
             }
             WidgetUtils.initRecyclerView(recyclerView);
             recyclerView.setAdapter(new ExpandableListChildAdapter(recyclerView,llec,getActivity()));
+        } else if (searchType == 8 || searchType == 9) {
+            BigDecimal income, expense;
+            income = new BigDecimal(0);
+            expense = new BigDecimal(0);
+            for (List<List<Transaction>> llt : data_triple) {
+                for (List<Transaction> lt : llt) {
+                    for (Transaction t : lt) {
+                        if (t.outaccount == Transaction.NONTRANSFER) {
+                            BigDecimal bd = new BigDecimal(t.amount);
+                            if (t.amount > 0) {
+                                income = income.add(bd.movePointLeft(2));
+                            }
+                            else {
+                                expense = expense.add(bd.movePointLeft(2).negate());
+                            }
+                        }
+                    }
+                }
+            }
+            tv_num_sum.setText((income.subtract(expense)).toString());
+            tv_num_in.setText(income.toString());
+            tv_num_out.setText(expense.toString());
+            List<LineElement> lle = new LinkedList<>();
+            for (List<List<Transaction>> llt:data_triple){
+                if (llt != null && !llt.isEmpty()){
+                    List<LineElementChild> llec= new LinkedList<>();
+                    for (List<Transaction> lt :llt){
+                        if (lt != null && !lt.isEmpty()){
+                            List<View> lv = new LinkedList<>();
+                            for (Transaction t:lt){
+                                if (t != null){
+                                    lv.add(BillToViewAdapter(t));
+                                }
+                            }
+                            LineElementChild lec = new LineElementChild(getLineElementChildTitle(lt),getLineElementChildIn(lt).toPlainString(),
+                                    getLineElementChildOut(lt).toPlainString(),"",lv);
+                            llec.add(lec);
+                        }
+                    }
+                    LineElement le = new LineElement(getLineElementTitle(llt),getLineElementSum(llt).toPlainString(),
+                            getLineElementIn(llt).toPlainString(),getLineElementOut(llt).toPlainString(),llec);
+                    lle.add(le);
+                }
+            }
+            WidgetUtils.initRecyclerView(recyclerView);
+            recyclerView.setAdapter(new ExpandableListAdapter(recyclerView,lle,getActivity()));
         }
     }
 
@@ -460,8 +507,8 @@ public class JournalAccountActivity extends Fragment {
             BigDecimal bd = new BigDecimal(t.amount);
             bd = bd.movePointLeft(2);
             tv_money.setText(bd.toString());
-            if (t.outaccount == Transaction.NONTRANSFER){
-                tv_money.setTextColor(Color.parseColor("#FFA500"));
+            if (t.outaccount != Transaction.NONTRANSFER){
+                tv_money.setTextColor(Color.parseColor("#1571BA"));
             }else if (t.amount > 0){
                 tv_money.setTextColor(Color.parseColor("#20BD27"));
             }else {
@@ -474,7 +521,7 @@ public class JournalAccountActivity extends Fragment {
                     bundle.putInt("id",t.id);
                     bundle.putInt("type",t.type);
                     bundle.putInt("outaccount",t.outaccount);
-                    Intent intent = new Intent(getActivity(), TabAddActivity.class).putExtras(bundle);
+                    Intent intent = new Intent(getActivity(), ModifyActivity.class).putExtras(bundle);
                     getActivity().startActivity(intent);
                 }
             });

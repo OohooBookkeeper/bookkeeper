@@ -16,14 +16,15 @@
 
             <LinearLayout
                 android:id="@+id/time_select"
-                android:layout_width="280dp"
+                android:layout_width="match_parent"
                 android:layout_height="30dp">
                 <Button
                     android:id="@+id/btn_DateStart"
                     android:background="@android:color/transparent"
                     android:textSize="15sp"
                     android:text="2020年12月12日"
-                    android:layout_width="120dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
                     android:layout_height="match_parent" />
 
                 <ImageView
@@ -38,7 +39,8 @@
                     android:textSize="15sp"
                     android:background="@android:color/transparent"
                     android:text="2020年12月12日"
-                    android:layout_width="120dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
                     android:layout_height="match_parent"
                     android:layout_toRightOf="@id/btn_DateStart"/>
 
@@ -154,6 +156,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/tList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/select_how_to_show"
@@ -165,6 +168,15 @@
                     android:overScrollMode="never" />
             </LinearLayout>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tList"
+                android:text="我是有底线的"
+                android:layout_margin="16dp"
+                android:textSize="16sp"
+                android:textAlignment="center"
+                />
         </RelativeLayout>
 
     </ScrollView>

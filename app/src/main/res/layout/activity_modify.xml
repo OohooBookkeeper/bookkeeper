@@ -11,6 +11,7 @@
         android:theme="@style/AppTheme2"
         android:elevation="5dp">
         <TextView
+            android:id="@+id/txt_title"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="账目信息"
