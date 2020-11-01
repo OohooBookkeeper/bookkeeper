@@ -32,105 +32,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/tb_home"
-            android:layout_above="@+id/bottom_bar"/>
+            android:layout_above="@+id/btmnav"/>
 
-        <LinearLayout
-            android:id="@+id/bottom_bar"
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/btmnav"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:orientation="horizontal"
-            android:background="#F2F2F8">
-
-            <RelativeLayout
-                android:id="@+id/bottom_bar_1_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/bottom_bar_tv_1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="2dp"
-                    android:gravity="center"
-                    android:text="首页"
-                    android:textColor="#000000"
-                    android:textSize="14sp"/>
-
-                <ImageView
-                    android:id="@+id/bottom_bar_iv_1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_above="@id/bottom_bar_tv_1"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="2dp"
-                    android:src="@drawable/nav_01_nor"/>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/bottom_bar_2_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/bottom_bar_tv_2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="2dp"
-                    android:gravity="center"
-                    android:text="流水"
-                    android:textColor="#000000"
-                    android:textSize="14sp"/>
-
-                <ImageView
-                    android:id="@+id/bottom_bar_iv_2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_above="@id/bottom_bar_tv_2"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="2dp"
-                    android:src="@drawable/nav_02_nor"/>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/bottom_bar_4_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/bottom_bar_tv_4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="2dp"
-                    android:gravity="center"
-                    android:text="统计"
-                    android:textColor="#000000"
-                    android:textSize="14sp"/>
-
-                <ImageView
-                    android:id="@+id/bottom_bar_iv_4"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_above="@id/bottom_bar_tv_4"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="2dp"
-                    android:src="@drawable/nav_04_nor"/>
-            </RelativeLayout>
-
-        </LinearLayout>
-
+            android:background="#f2f6f9"
+            app:menu="@menu/menu_btm"
+            />
 
     </RelativeLayout>
 

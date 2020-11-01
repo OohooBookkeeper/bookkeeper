@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/btm_home"
+        android:orderInCategory="100"
+        android:title="首页"
+        android:icon="@drawable/home"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/btm_list"
+        android:orderInCategory="100"
+        android:title="流水"
+        android:icon="@drawable/list"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/btm_stats"
+        android:orderInCategory="100"
+        android:title="图表"
+        android:icon="@drawable/stats"
+        app:showAsAction="ifRoom"/>
+</menu>

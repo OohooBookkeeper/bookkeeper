@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/secS"
+        android:orderInCategory="100"
+        android:title="安全设置">
+        <menu>
+            <item
+                android:id="@+id/ptnS"
+                android:title="图形密码设置"/>
+            <item
+                android:id="@+id/chgP"
+                android:title="修改密码"/>
+            <item
+                android:id="@+id/chgSP"
+                android:title="修改密保问题"/>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/trnS"
+        android:orderInCategory="100"
+        android:title="记账设置">
+        <menu>
+            <item
+                android:id="@+id/inCS"
+                android:title="收入分类管理"/>
+            <item
+                android:id="@+id/exCS"
+                android:title="支出分类管理"/>
+            <item
+                android:id="@+id/accS"
+                android:title="账户管理"/>
+            <item
+                android:id="@+id/memS"
+                android:title="成员管理"/>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/signOut"
+        android:orderInCategory="100"
+        android:title="退出登录" />
+    <item
+        android:id="@+id/AboutUs"
+        android:orderInCategory="100"
+        android:title="关于我们" />
+</menu>

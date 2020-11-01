@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,13 +30,11 @@ import com.example.jizhangdemo.setting.ManageInCategoryActivity;
 import com.example.jizhangdemo.setting.ManageMemberActivity;
 import com.example.jizhangdemo.setting.ManageOutCategoryActivity;
 import com.example.jizhangdemo.setting.VerifyPasswordActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 public class BottomBarActivity extends AppCompatActivity {
 
-    private TextView bottom_bar_tv_1, bottom_bar_tv_2, bottom_bar_tv_4;
-    private ImageView bottom_bar_iv_1, bottom_bar_iv_2, bottom_bar_iv_4;
-    private RelativeLayout bottom_bar_1_btn, bottom_bar_2_btn, bottom_bar_4_btn;
     private HomePageActivity fragment1;
     private JournalAccountActivity fragment2;
     private StatisticsActivity fragment4;
@@ -43,47 +42,7 @@ public class BottomBarActivity extends AppCompatActivity {
     private NavigationView navView;
     private Toolbar tb;
     private DrawerLayout drawer;
-
-    public void setSelectStatus(int index) {
-        switch (index) {
-            case 0:
-                bottom_bar_iv_1.setImageResource(R.drawable.nav_01_pre);
-                bottom_bar_iv_2.setImageResource(R.drawable.nav_02_nor);
-                bottom_bar_iv_4.setImageResource(R.drawable.nav_04_nor);
-
-                bottom_bar_tv_1.setTextColor(Color.parseColor("#0097F7"));
-                bottom_bar_tv_2.setTextColor(Color.parseColor("#000000"));
-                bottom_bar_tv_4.setTextColor(Color.parseColor("#000000"));
-                break;
-            case 1:
-                bottom_bar_iv_1.setImageResource(R.drawable.nav_01_nor);
-                bottom_bar_iv_2.setImageResource(R.drawable.nav_02_pre);
-                bottom_bar_iv_4.setImageResource(R.drawable.nav_04_nor);
-
-                bottom_bar_tv_1.setTextColor(Color.parseColor("#000000"));
-                bottom_bar_tv_2.setTextColor(Color.parseColor("#0097F7"));
-                bottom_bar_tv_4.setTextColor(Color.parseColor("#000000"));
-                break;
-            case 3:
-                bottom_bar_iv_1.setImageResource(R.drawable.nav_01_nor);
-                bottom_bar_iv_2.setImageResource(R.drawable.nav_02_nor);
-                bottom_bar_iv_4.setImageResource(R.drawable.nav_04_pre);
-
-                bottom_bar_tv_1.setTextColor(Color.parseColor("#000000"));
-                bottom_bar_tv_2.setTextColor(Color.parseColor("#000000"));
-                bottom_bar_tv_4.setTextColor(Color.parseColor("#0097F7"));
-                break;
-            case 4:
-                bottom_bar_iv_1.setImageResource(R.drawable.nav_01_nor);
-                bottom_bar_iv_2.setImageResource(R.drawable.nav_02_nor);
-                bottom_bar_iv_4.setImageResource(R.drawable.nav_04_nor);
-
-                bottom_bar_tv_1.setTextColor(Color.parseColor("#000000"));
-                bottom_bar_tv_2.setTextColor(Color.parseColor("#000000"));
-                bottom_bar_tv_4.setTextColor(Color.parseColor("#000000"));
-                break;
-        }
-    }
+    private BottomNavigationView btm_nav;
 
     @Override
     public void onBackPressed() {
@@ -92,7 +51,6 @@ public class BottomBarActivity extends AppCompatActivity {
             drawer.closeDrawer(Gravity.LEFT);
         else if (current != null && !(current instanceof HomePageActivity)) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fl_container, fragment1).commitAllowingStateLoss();
-            setSelectStatus(0);
         }
         else
             super.onBackPressed();
@@ -107,18 +65,6 @@ public class BottomBarActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putString("username", username);
 
-        bottom_bar_tv_1 = findViewById(R.id.bottom_bar_tv_1);
-        bottom_bar_tv_2 = findViewById(R.id.bottom_bar_tv_2);
-        bottom_bar_tv_4 = findViewById(R.id.bottom_bar_tv_4);
-
-        bottom_bar_iv_1 = findViewById(R.id.bottom_bar_iv_1);
-        bottom_bar_iv_2 = findViewById(R.id.bottom_bar_iv_2);
-        bottom_bar_iv_4 = findViewById(R.id.bottom_bar_iv_4);
-
-        bottom_bar_1_btn = findViewById(R.id.bottom_bar_1_btn);
-        bottom_bar_2_btn = findViewById(R.id.bottom_bar_2_btn);
-        bottom_bar_4_btn = findViewById(R.id.bottom_bar_4_btn);
-
         fragment1 = new HomePageActivity();
         fragment2 = new JournalAccountActivity();
         fragment4 = new StatisticsActivity();
@@ -130,12 +76,6 @@ public class BottomBarActivity extends AppCompatActivity {
         fragment5.setArguments(bundle);
 
         getSupportFragmentManager().beginTransaction().add(R.id.fl_container, fragment1).commitAllowingStateLoss();
-        setSelectStatus(0);
-
-        OnClick onClick = new OnClick();
-        bottom_bar_1_btn.setOnClickListener(onClick);
-        bottom_bar_2_btn.setOnClickListener(onClick);
-        bottom_bar_4_btn.setOnClickListener(onClick);
         drawer = findViewById(R.id.drawer_home);
         tb = findViewById(R.id.tb_home);
         tb.setTitle("");
@@ -197,25 +137,30 @@ public class BottomBarActivity extends AppCompatActivity {
                 return false;
             }
         });
-    }
+        btm_nav = findViewById(R.id.btmnav);
+        btm_nav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.btm_home:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fl_container, fragment1).commitAllowingStateLoss();
+                        btm_nav.getMenu().getItem(0).setChecked(true);
 
-    private class OnClick implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.bottom_bar_1_btn:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fl_container, fragment1).commitAllowingStateLoss();
-                    setSelectStatus(0);
-                    break;
-                case R.id.bottom_bar_2_btn:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fl_container, fragment2).commitAllowingStateLoss();
-                    setSelectStatus(1);
-                    break;
-                case R.id.bottom_bar_4_btn:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fl_container, fragment4).commitAllowingStateLoss();
-                    setSelectStatus(3);
-                    break;
+                        break;
+                    case R.id.btm_list:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fl_container, fragment2).commitAllowingStateLoss();
+                        btm_nav.getMenu().getItem(1).setChecked(true);
+                        break;
+                    case R.id.btm_stats:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fl_container, fragment4).commitAllowingStateLoss();
+                        btm_nav.getMenu().getItem(2).setChecked(true);
+                        break;
+                    default:
+                        Toast.makeText(BottomBarActivity.this, "未知错误", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+                return false;
             }
-        }
+        });
     }
 }
