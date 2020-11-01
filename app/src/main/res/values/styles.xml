@@ -7,4 +7,9 @@
         <item name="colorAccent">@color/xui_config_color_main_theme</item>
     </style>
 
+    <style name="AppTheme2">
+        <!-- Customize your theme here. -->
+        <item name="actionMenuTextColor">#ffffff</item>
+    </style>
+
 </resources>

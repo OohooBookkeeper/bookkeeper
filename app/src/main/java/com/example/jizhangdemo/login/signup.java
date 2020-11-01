@@ -1,6 +1,7 @@
 package com.example.jizhangdemo.login;
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
 import com.example.jizhangdemo.AccountHelper;
 import com.example.jizhangdemo.Initialization;
@@ -9,6 +10,7 @@ import javax.crypto.Cipher;
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
@@ -35,7 +37,7 @@ public class signup extends Activity {
         else if(accountHelper.query(username).getCount()!=0) {  //判断用户输入的用户名是否已经存在
             error_code = 2;//用户名已经存在
         }
-        else if(!ans.equals("")){  //判断用户是否输入密保问题答案
+        else if(ans.equals("")){  //判断用户是否输入密保问题答案
             error_code = 5;//用户没有输入密保问题答案
         }
         else {  //登录成功
@@ -48,9 +50,11 @@ public class signup extends Activity {
             byte[] encryptResult_answer = encrypt(ans, Key);
             String encryptResultStr_answer = parseByte2HexStr(encryptResult_answer);
             int defaultlogin = AccountHelper.PASSWD;
+            Log.d("test-signup", username + " " + password);
             accountHelper.signup(username, encryptResultStr, problem_num, encryptResultStr_answer, patternEnabled , pattern, defaultlogin);//将注册信息存入数据库
             Initialization.Initialization(context,username);
         }
+        Log.d("test-error-code", String.valueOf(error_code));
         return error_code;
     }
 
@@ -101,8 +105,7 @@ public class signup extends Activity {
             SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");//"算法/模式/补码方式"
             cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
-            byte[] result = cipher.doFinal(content.getBytes("utf-8"));
-            return result;
+            return cipher.doFinal(content.getBytes(StandardCharsets.UTF_8));
 
         } catch (NoSuchPaddingException e) {
             e.printStackTrace();

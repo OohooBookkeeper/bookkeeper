@@ -54,6 +54,8 @@ public class StatisticsActivity extends Fragment implements OnChartValueSelected
     private BookHelper bkhp;
     private String username;
 
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -80,11 +82,25 @@ public class StatisticsActivity extends Fragment implements OnChartValueSelected
         InitSpinner();
         init_time_picker();
         initChartStyle();
+
         if (mGraphData != null && !mGraphData.isEmpty()){
             initPieChart();
         }else {
             Toast.makeText(getActivity(),"无有效数据",Toast.LENGTH_SHORT).show();
         }
+
+        mPieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
+
     }
 
     @Override

@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.jizhangdemo.R;
 import com.example.jizhangdemo.add.BookHelper;
 import com.example.jizhangdemo.add.KeepAccountActivity;
+import com.example.jizhangdemo.add.ModifyActivity;
 import com.example.jizhangdemo.add.TabAddActivity;
 import com.example.jizhangdemo.journalAccount.Display;
 import com.example.jizhangdemo.journalAccount.ExpandableListChildAdapter;
@@ -36,6 +39,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class HomePageActivity extends Fragment {
@@ -80,6 +84,7 @@ public class HomePageActivity extends Fragment {
         two = view.findViewById(R.id.two);
         tmo = view.findViewById(R.id.tmo);
         tyo = view.findViewById(R.id.tyo);
+
         LoadData();
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -97,20 +102,34 @@ public class HomePageActivity extends Fragment {
         LoadData();
     }
 
+    public void setToFirstMinute(Calendar c) {
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+    }
+
+    public void setToLastMinute(Calendar c) {
+        c.set(Calendar.HOUR_OF_DAY, 23);
+        c.set(Calendar.MINUTE, 59);
+        c.set(Calendar.SECOND, 0);
+    }
+
     private void LoadData() {
+        List<Transaction> tList;
+        int key;
         dis.notifyDatasetChanged();
         data_double = new LinkedList<>();
         Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
         Calendar c2 = Calendar.getInstance();
-        c.setFirstDayOfWeek(Calendar.SUNDAY);
-        c.set(Calendar.HOUR, 0);
-        c.set(Calendar.MINUTE, 0);
-        c.set(Calendar.SECOND, 0);
-        c2.set(Calendar.HOUR, 23);
-        c2.set(Calendar.MINUTE, 59);
-        c2.set(Calendar.SECOND, 0);
-        Map<Integer, List<Transaction>> dataForStats;
+        c2.setTime(new Date());
+        setToFirstMinute(c);
+        setToLastMinute(c2);
         Map<Integer, List<Transaction>> dataByDate = dis.displayBy(c.getTime(), c2.getTime(), Display.DATE);
+        c.setFirstDayOfWeek(Calendar.SUNDAY);
+        c2.set(Calendar.MONTH, Calendar.DECEMBER);
+        c2.set(Calendar.DATE, 31);
+        Map<Integer, List<Transaction>> dataByDate2 = dis.displayBy(new Date(0), c2.getTime(), Display.DATE);
         int expense, income;
         Set<Integer> d = dataByDate.keySet();
         Date now = new Date();
@@ -120,26 +139,104 @@ public class HomePageActivity extends Fragment {
         SimpleDateFormat fmt = new SimpleDateFormat();
         fmt.applyPattern("yyyy-MM-dd");
         tDated.setText(fmt.format(now));
+        expense = 0;
+        income = 0;
+        key = (c.get(Calendar.YEAR) - 1970) * 1200 + c.get(Calendar.MONTH) * 100 + c.get(Calendar.DATE);
+        if (dataByDate2.containsKey(key)) {
+            tList = dataByDate2.get(key);
+            for (Transaction t : tList) {
+                if (t.outaccount == Transaction.NONTRANSFER) {
+                    if (t.amount > 0)
+                        income += t.amount;
+                    else
+                        expense += t.amount;
+                }
+            }
+        }
+        tdi.setText((new BigDecimal(income)).movePointLeft(2).toString());
+        tdo.setText((new BigDecimal(expense)).movePointLeft(2).toString());
         c.setTime(now);
         c.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+        setToFirstMinute(c);
         from = c.getTime();
+        c.setTime(now);
         c.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+        setToLastMinute(c);
         to = c.getTime();
         tDatew.setText(fmt.format(from) + "到" + fmt.format(to));
+        expense = 0;
+        income = 0;
+        for (int dateKey : dataByDate2.keySet()) {
+            for (Transaction t : Objects.requireNonNull(dataByDate2.get(dateKey))) {
+                Date ddd = new Date((long)t.time * 60000);
+                if (ddd.before(from) || ddd.after(to))
+                    continue;
+                if (t.outaccount == Transaction.NONTRANSFER) {
+                    if (t.amount > 0)
+                        income += t.amount;
+                    else
+                        expense += t.amount;
+                }
+            }
+        }
+        twi.setText((new BigDecimal(income)).movePointLeft(2).toString());
+        two.setText((new BigDecimal(expense)).movePointLeft(2).toString());
         c.setTime(now);
         c.set(Calendar.DAY_OF_MONTH, 1);
+        setToFirstMinute(c);
         from = c.getTime();
-        c.set(Calendar.DAY_OF_MONTH, 31);
+        c.clear();
+        c.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR));
+        c.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH));
+        c.roll(Calendar.DAY_OF_MONTH, -1);
+        setToLastMinute(c);
         to = c.getTime();
         tDatem.setText(fmt.format(from) + "到" + fmt.format(to));
-        c.set(Calendar.MONTH, Calendar.JANUARY);
+        expense = 0;
+        income = 0;
+        for (int dateKey : dataByDate2.keySet()) {
+            for (Transaction t : Objects.requireNonNull(dataByDate2.get(dateKey))) {
+                Date ddd = new Date((long)t.time * 60000);
+                if (ddd.before(from) || ddd.after(to))
+                    continue;
+                if (t.outaccount == Transaction.NONTRANSFER) {
+                    if (t.amount > 0)
+                        income += t.amount;
+                    else
+                        expense += t.amount;
+                }
+            }
+        }
+        tmi.setText((new BigDecimal(income)).movePointLeft(2).toString());
+        tmo.setText((new BigDecimal(expense)).movePointLeft(2).toString());
+        c.set(Calendar.DAY_OF_YEAR, c.getActualMinimum(Calendar.DAY_OF_YEAR));
+        setToFirstMinute(c);
         from = c.getTime();
-        c.set(Calendar.MONTH, Calendar.DECEMBER);
-        c.set(Calendar.DAY_OF_MONTH, 31);
+        c.clear();
+        c.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR));
+        c.roll(Calendar.DAY_OF_YEAR, -1);
+        setToLastMinute(c);
         to = c.getTime();
         tDatey.setText(fmt.format(from) + "到" + fmt.format(to));
-        for (int key : d) {
-            data_double.add(dataByDate.get(key));
+        expense = 0;
+        income = 0;
+        for (int dateKey : dataByDate2.keySet()) {
+            for (Transaction t : Objects.requireNonNull(dataByDate2.get(dateKey))) {
+                Date ddd = new Date((long)t.time * 60000);
+                if (ddd.before(from) || ddd.after(to))
+                    continue;
+                if (t.outaccount == Transaction.NONTRANSFER) {
+                    if (t.amount > 0)
+                        income += t.amount;
+                    else
+                        expense += t.amount;
+                }
+            }
+        }
+        tyi.setText((new BigDecimal(income)).movePointLeft(2).toString());
+        tyo.setText((new BigDecimal(expense)).movePointLeft(2).toString());
+        for (int key2 : d) {
+            data_double.add(dataByDate.get(key2));
         }
         List<LineElementChild> llec= new LinkedList<>();
         for (List<Transaction> lt :data_double){
